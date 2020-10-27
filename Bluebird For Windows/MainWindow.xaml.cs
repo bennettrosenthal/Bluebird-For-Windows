@@ -62,14 +62,30 @@ namespace Bluebird_For_Windows
 
         private void pogcheck_SelectionChanged(object sender, SelectionChangedEventArgs e)
         {
-
+            Object gameChosen = pogcheck.SelectedItem;
+            pogbox.Text = gameChosen.ToString();
         }
 
         private void pogcheck_Click(object sender, MouseEventArgs e)
         {
-            // this removes the "please select a game" choice when the dropdown is clicked on (and logs the clicks for testing)
-            pogcheck.Items.Remove("Please select a game.");
-            pogbox.Text += "Click ";
+            
+        }
+
+        private void Button_Click(object sender, RoutedEventArgs e)
+        {
+            Object gameChosen = pogcheck.SelectedItem;
+            string game = gameChosen.ToString();
+            String folderPath = new string(Environment.GetFolderPath(Environment.SpecialFolder.ProgramFilesX86) + "\\ModernEra");
+            string txtLines = File.ReadAllText(folderPath + "\\upsiopts.txt");
+            string[] split = txtLines.Split("END");
+
+            
+            foreach (var line in split)
+            {
+                pogbox.Text += line;
+            }
+            
+
         }
     }
 }
