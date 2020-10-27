@@ -25,9 +25,11 @@ namespace Bluebird_For_Windows
         public MainWindow()
         {
             InitializeComponent();
+            // sets the dropdown to display "Please select a game"
             pogcheck.Items.Insert(0,"Please select a game.");
             pogcheck.SelectedIndex = 0;
             
+            // creates program files (x86) directory and, if the txt file exists, deletes it and redownloads it
             Directory.CreateDirectory(Environment.GetFolderPath(Environment.SpecialFolder.ProgramFilesX86) + "\\ModernEra");
             String folderPath = new string(Environment.GetFolderPath(Environment.SpecialFolder.ProgramFilesX86) + "\\ModernEra");
             WebClient dl = new WebClient();
@@ -38,8 +40,11 @@ namespace Bluebird_For_Windows
             }
             dl.DownloadFile(txtURL, folderPath + "\\upsiopts.txt");
             
+            // creates an array to read the txt into an array
             string[] txtLines = File.ReadAllLines(folderPath + "\\upsiopts.txt");
             string temp;
+
+            // loops through array, looking for the names of the games then drops them into the dropdown
             foreach (string line in txtLines)
             {
                 if (line.StartsWith("NAME="))
@@ -62,6 +67,7 @@ namespace Bluebird_For_Windows
 
         private void pogcheck_Click(object sender, MouseEventArgs e)
         {
+            // this removes the "please select a game" choice when the dropdown is clicked on (and logs the clicks for testing)
             pogcheck.Items.Remove("Please select a game.");
             pogbox.Text += "Click ";
         }
