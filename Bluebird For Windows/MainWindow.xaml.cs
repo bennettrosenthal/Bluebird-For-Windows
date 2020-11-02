@@ -25,10 +25,7 @@ namespace Bluebird_For_Windows
         public MainWindow()
         {
             InitializeComponent();
-            // sets the dropdown to display "Please select a game"
-            pogcheck.Items.Insert(0,"Please select a game.");
-            pogcheck.SelectedIndex = 0;
-            
+
             // creates program files (x86) directory and, if the txt file exists, deletes it and redownloads it
             Directory.CreateDirectory(Environment.GetFolderPath(Environment.SpecialFolder.ProgramFilesX86) + "\\ModernEra");
             String folderPath = new string(Environment.GetFolderPath(Environment.SpecialFolder.ProgramFilesX86) + "\\ModernEra");
@@ -73,19 +70,22 @@ namespace Bluebird_For_Windows
 
         private void Button_Click(object sender, RoutedEventArgs e)
         {
-            Object gameChosen = pogcheck.SelectedItem;
-            string game = gameChosen.ToString();
+            // gets path to data folder
             String folderPath = new string(Environment.GetFolderPath(Environment.SpecialFolder.ProgramFilesX86) + "\\ModernEra");
+            // reads into a string, then splits the string into an array, where each item is a portion of the txt, split by the word "END"
             string txtLines = File.ReadAllText(folderPath + "\\upsiopts.txt");
             string[] split = txtLines.Split("END");
-
-            
-            foreach (var line in split)
+            // gets the selected item's index, and because the order of the names will be the same as the one in the txt, 
+            // uses it to select the game's array item
+            int index = pogcheck.SelectedIndex;
+            string[] gameArray = split[index].Split("\n");
+            foreach (string line in gameArray)
             {
-                pogbox.Text += line;
+                if (line.StartsWith("DOWNLOADFROM="))
+                {
+                    pogbox.Text = line;
+                }
             }
-            
-
         }
     }
 }
