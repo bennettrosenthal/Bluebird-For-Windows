@@ -14,6 +14,8 @@ using System.Windows.Navigation;
 using System.Windows.Shapes;
 using System.IO;
 using System.Net;
+using System.DirectoryServices.ActiveDirectory;
+using System.ComponentModel;
 
 namespace Bluebird_For_Windows
 {
@@ -79,12 +81,49 @@ namespace Bluebird_For_Windows
             // uses it to select the game's array item
             int index = pogcheck.SelectedIndex;
             string[] gameArray = split[index].Split("\n");
+            
+            // getting the required details for download and install
+            string gameURL = "";
+            string gameName = "";
+            string gameZip = "";
             foreach (string line in gameArray)
             {
                 if (line.StartsWith("DOWNLOADFROM="))
                 {
-                    pogbox.Text = line;
+                    string temp = line.Substring(line.IndexOf("DOWNLOADFROM=")).Replace("DOWNLOADFROM=", "");
+                    string temp2 = temp.Replace("\r", "");
+                    gameURL = temp2;
                 }
+
+                if (line.StartsWith("NAME="))
+                {
+                    string temp = line.Substring(line.IndexOf("NAME=")).Replace("NAME=", "");
+                    string temp2 = temp.Replace("\r", "");
+                    gameName = temp2;
+                }
+
+                if (line.StartsWith("ZIPNAME="))
+                {
+                    string temp = line.Substring(line.IndexOf("ZIPNAME=")).Replace("ZIPNAME=", "");
+                    string temp2 = temp.Replace("\r", "");
+                    gameZip = temp2;
+                }
+            }
+
+            // set up download environment
+            WebClient AAAA = new WebClient();
+            Uri gameDL = new Uri(gameURL);
+            pogbox.Text = "Downloading game...";
+            Directory.CreateDirectory(folderPath + "\\" + gameName);
+
+            // declare event handler for the DL, as if we did this syncronised the UI would freeze, and w/o the handler it would just move on
+            AAAA.DownloadFileCompleted += new AsyncCompletedEventHandler(done);
+            AAAA.DownloadFileAsync(gameDL, folderPath + "\\" + gameName + "\\" + gameZip);
+            
+            // now the rest of out code goes in here, as it will start the code after the async download is completed 
+            void done(object sender, AsyncCompletedEventArgs e)
+            {
+                pogbox.Text = "DL Complete";
             }
         }
     }
