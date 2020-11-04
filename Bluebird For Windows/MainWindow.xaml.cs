@@ -16,6 +16,7 @@ using System.IO;
 using System.Net;
 using System.DirectoryServices.ActiveDirectory;
 using System.ComponentModel;
+using System.Diagnostics;
 
 namespace Bluebird_For_Windows
 {
@@ -120,10 +121,24 @@ namespace Bluebird_For_Windows
             AAAA.DownloadFileCompleted += new AsyncCompletedEventHandler(done);
             AAAA.DownloadFileAsync(gameDL, folderPath + "\\" + gameName + "\\" + gameZip);
             
-            // now the rest of out code goes in here, as it will start the code after the async download is completed 
+            // now the rest of our code goes in here, as it will start the code after the async download is completed 
             void done(object sender, AsyncCompletedEventArgs e)
             {
                 pogbox.Text = "DL Complete";
+                
+                // ill make this a separate function later
+                string adbLocation = AppDomain.CurrentDomain.BaseDirectory + "\\adb.exe";
+                Process process = new Process();
+                // hides the console window so people dont freak out
+                process.StartInfo.WindowStyle = ProcessWindowStyle.Hidden;
+                process.StartInfo.CreateNoWindow = true;
+
+                process = System.Diagnostics.Process.Start(adbLocation, "devices");
+                process.WaitForExit();
+                pogbox.Text = "devices found";
+                process = System.Diagnostics.Process.Start(adbLocation, "devices");
+                process.WaitForExit();
+                pogbox.Text = "second thing done";
             }
         }
     }
