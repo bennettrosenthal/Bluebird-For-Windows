@@ -17,6 +17,8 @@ using System.Net;
 using System.DirectoryServices.ActiveDirectory;
 using System.ComponentModel;
 using System.Diagnostics;
+using System.IO.Compression;
+
 
 namespace Bluebird_For_Windows
 {
@@ -114,6 +116,10 @@ namespace Bluebird_For_Windows
             // set up download environment
             WebClient AAAA = new WebClient();
             Uri gameDL = new Uri(gameURL);
+            if (Directory.Exists(folderPath + "\\" + gameName))
+            {
+                Directory.Delete(folderPath + "\\" + gameName, true);
+            }
             pogbox.Text = "Downloading game...";
             Directory.CreateDirectory(folderPath + "\\" + gameName);
 
@@ -122,11 +128,17 @@ namespace Bluebird_For_Windows
             AAAA.DownloadFileAsync(gameDL, folderPath + "\\" + gameName + "\\" + gameZip);
             
             // now the rest of our code goes in here, as it will start the code after the async download is completed 
-            void done(object sender, AsyncCompletedEventArgs e)
+            async void done(object sender, AsyncCompletedEventArgs e)
             {
-                pogbox.Text = "DL Complete";
+                pogbox.Text = "Download complete, unzipping " + gameName + "...";
+                await Task.Run(() => ZipFile.ExtractToDirectory(folderPath + "\\" + gameName + "\\" + gameZip, folderPath + "\\" + gameName));
+                pogbox.Text = "Unzipping complete, testing ADB...";
+                adbCommands();
                 
-                // ill make this a separate function later
+            }
+
+            void adbCommands()
+            {
                 string adbLocation = AppDomain.CurrentDomain.BaseDirectory + "\\adb.exe";
                 Process process = new Process();
                 // hides the console window so people dont freak out
@@ -136,9 +148,16 @@ namespace Bluebird_For_Windows
                 process = System.Diagnostics.Process.Start(adbLocation, "devices");
                 process.WaitForExit();
                 pogbox.Text = "devices found";
+                process.StartInfo.WindowStyle = ProcessWindowStyle.Hidden;
+                process.StartInfo.CreateNoWindow = true;
                 process = System.Diagnostics.Process.Start(adbLocation, "devices");
                 process.WaitForExit();
                 pogbox.Text = "second thing done";
+                foreach (var bitch in Process.GetProcessesByName("adb"))
+                {
+                    bitch.Kill();
+                }
+                pogbox.Text = "adb is kil";
             }
         }
     }
