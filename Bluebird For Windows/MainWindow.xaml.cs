@@ -89,6 +89,10 @@ namespace Bluebird_For_Windows
             string gameURL = "";
             string gameName = "";
             string gameZip = "";
+            string gameID = "";
+            string apkName = "";
+            string obbName = "";
+            string adbFolderName = "";
             foreach (string line in gameArray)
             {
                 if (line.StartsWith("DOWNLOADFROM="))
@@ -111,53 +115,112 @@ namespace Bluebird_For_Windows
                     string temp2 = temp.Replace("\r", "");
                     gameZip = temp2;
                 }
+
+                if (line.StartsWith("COMOBJECT="))
+                {
+                    string temp = line.Substring(line.IndexOf("COMOBJECT=")).Replace("COMOBJECT=", "");
+                    string temp2 = temp.Replace("\r", "");
+                    gameID = temp2;
+                }
+
+                if (line.StartsWith("APK="))
+                {
+                    string temp = line.Substring(line.IndexOf("APK=")).Replace("APK=", "");
+                    string temp2 = temp.Replace("\r", "");
+                    apkName = temp2;
+                }
+
+                if (line.StartsWith("OBB="))
+                {
+                    string temp = line.Substring(line.IndexOf("OBB=")).Replace("OBB=", "");
+                    string temp2 = temp.Replace("\r", "");
+                    obbName = temp2;
+                }
             }
 
             // set up download environment
             WebClient AAAA = new WebClient();
             Uri gameDL = new Uri(gameURL);
+            Uri adbDL = new Uri("https://dl.google.com/android/repository/platform-tools-latest-windows.zip");
             if (Directory.Exists(folderPath + "\\" + gameName))
             {
                 Directory.Delete(folderPath + "\\" + gameName, true);
             }
-            pogbox.Text = "Downloading game...";
+            if (Directory.Exists(folderPath + "\\" + "adb"))
+            {
+                Directory.Delete(folderPath + "\\" + "adb", true);
+            }
+            pogbox.Text = "Downloading ADB...";
             Directory.CreateDirectory(folderPath + "\\" + gameName);
+            Directory.CreateDirectory(folderPath + "\\" + "adb");
 
             // declare event handler for the DL, as if we did this syncronised the UI would freeze, and w/o the handler it would just move on
             AAAA.DownloadFileCompleted += new AsyncCompletedEventHandler(done);
-            AAAA.DownloadFileAsync(gameDL, folderPath + "\\" + gameName + "\\" + gameZip);
-            
+            AAAA.DownloadFileAsync(adbDL, folderPath);
+            if (!String.IsNullOrEmpty(AAAA.ResponseHeaders["Content-Disposition"]))
+            {
+                adbFolderName = AAAA.ResponseHeaders["Content-Disposition"].Substring(AAAA.ResponseHeaders["Content-Disposition"].IndexOf("filename=") + 9).Replace("\"", "");
+            }
+
             // now the rest of our code goes in here, as it will start the code after the async download is completed 
             async void done(object sender, AsyncCompletedEventArgs e)
             {
-                pogbox.Text = "Download complete, unzipping " + gameName + "...";
-                await Task.Run(() => ZipFile.ExtractToDirectory(folderPath + "\\" + gameName + "\\" + gameZip, folderPath + "\\" + gameName));
-                pogbox.Text = "Unzipping complete, testing ADB...";
-                adbCommands();
-                
+                pogbox.Text = "Unzipping ADB...";
+                await Task.Run(() => ZipFile.ExtractToDirectory(folderPath + "\\" + adbFolderName, folderPath + "\\" + "adb"));
+                pogbox.Text = "Downloading game...";
+
+                WebClient BBBB = new WebClient();
+                BBBB.DownloadFileCompleted += new AsyncCompletedEventHandler(ayo);
+                BBBB.DownloadFileAsync(gameDL, folderPath + "\\" + gameName + "\\" + gameZip);
+
+                async void ayo(object sender, AsyncCompletedEventArgs e)
+                {
+                    pogbox.Text = "Download complete, unzipping " + gameName + "..."; 
+                    await Task.Run(() => ZipFile.ExtractToDirectory(folderPath + "\\" + gameName + "\\" + gameZip, folderPath + "\\" + gameName)); 
+                    pogbox.Text = "Unzipping complete, testing ADB..."; 
+                    adbCommands(gameID, apkName, obbName);
+                }
             }
 
-            void adbCommands()
+            void adbCommands(string gameID, string apkName, string obbName)
             {
                 string adbLocation = AppDomain.CurrentDomain.BaseDirectory + "\\adb.exe";
                 Process process = new Process();
                 // hides the console window so people dont freak out
-                process.StartInfo.WindowStyle = ProcessWindowStyle.Hidden;
-                process.StartInfo.CreateNoWindow = true;
+                
+                process = System.Diagnostics.Process.Start(adbLocation, "devices");
+                process.WaitForExit();
+                pogbox.Text = "device found";
 
-                process = System.Diagnostics.Process.Start(adbLocation, "devices");
+                process = System.Diagnostics.Process.Start(adbLocation, "uninstall " + gameID);
                 process.WaitForExit();
-                pogbox.Text = "devices found";
-                process.StartInfo.WindowStyle = ProcessWindowStyle.Hidden;
-                process.StartInfo.CreateNoWindow = true;
-                process = System.Diagnostics.Process.Start(adbLocation, "devices");
+                pogbox.Text = gameName + " uninstalled! Installing APK...";
+                
+                process = System.Diagnostics.Process.Start(adbLocation, "install " + folderPath + "\\" + gameName + "\\" + apkName);
                 process.WaitForExit();
-                pogbox.Text = "second thing done";
+                pogbox.Text = "APK Installed! Setting permissions...";
+
+                process = System.Diagnostics.Process.Start(adbLocation, "-d shell pm grant " + gameID + " android.permission.RECORD_AUDIO");
+                process.WaitForExit();
+
+                process = System.Diagnostics.Process.Start(adbLocation, "-d shell pm grant " + gameID + " android.permission.READ_EXTERNAL_STORAGE");
+                process.WaitForExit();
+
+                process = System.Diagnostics.Process.Start(adbLocation, "-d shell pm grant " + gameID + " android.permission.WRITE_EXTERNAL_STORAGE");
+                process.WaitForExit();
+                pogbox.Text = "Permissions set! Pushing OBB...";
+
+                process = System.Diagnostics.Process.Start(adbLocation, "-d push " + folderPath + "\\" + gameName + "\\" + obbName);
+                process.WaitForExit();
+                pogbox.Text = "Setting name...";
+
+                // ADD NAMES HERE WHEN YOU CAN BE BOTHERED
+
+                pogbox.Text = gameName + " installed!";
                 foreach (var bitch in Process.GetProcessesByName("adb"))
                 {
                     bitch.Kill();
                 }
-                pogbox.Text = "adb is kil";
             }
         }
     }
