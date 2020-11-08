@@ -18,7 +18,8 @@ using System.DirectoryServices.ActiveDirectory;
 using System.ComponentModel;
 using System.Diagnostics;
 using System.IO.Compression;
-
+using System.Windows.Media.Animation;
+using System.Net.Mime;
 
 namespace Bluebird_For_Windows
 {
@@ -139,7 +140,6 @@ namespace Bluebird_For_Windows
             }
 
             // set up download environment
-            WebClient AAAA = new WebClient();
             Uri gameDL = new Uri(gameURL);
             Uri adbDL = new Uri("https://dl.google.com/android/repository/platform-tools-latest-windows.zip");
             if (Directory.Exists(folderPath + "\\" + gameName))
@@ -155,16 +155,22 @@ namespace Bluebird_For_Windows
             Directory.CreateDirectory(folderPath + "\\" + "adb");
 
             // declare event handler for the DL, as if we did this syncronised the UI would freeze, and w/o the handler it would just move on
+            WebClient AAAA = new WebClient();
             AAAA.DownloadFileCompleted += new AsyncCompletedEventHandler(done);
             AAAA.DownloadFileAsync(adbDL, folderPath);
-            if (!String.IsNullOrEmpty(AAAA.ResponseHeaders["Content-Disposition"]))
-            {
-                adbFolderName = AAAA.ResponseHeaders["Content-Disposition"].Substring(AAAA.ResponseHeaders["Content-Disposition"].IndexOf("filename=") + 9).Replace("\"", "");
-            }
 
             // now the rest of our code goes in here, as it will start the code after the async download is completed 
             async void done(object sender, AsyncCompletedEventArgs e)
             {
+                string[] files = Directory.GetFiles(folderPath, "platform*");
+                foreach(string file in files)
+                {
+                    if (file.StartsWith("platform"))
+                    {
+                        adbFolderName = file;
+                    }
+                }
+
                 pogbox.Text = "Unzipping ADB...";
                 await Task.Run(() => ZipFile.ExtractToDirectory(folderPath + "\\" + adbFolderName, folderPath + "\\" + "adb"));
                 pogbox.Text = "Downloading game...";
