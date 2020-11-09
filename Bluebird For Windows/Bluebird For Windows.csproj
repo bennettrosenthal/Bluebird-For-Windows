@@ -9,11 +9,13 @@
   </PropertyGroup>
 
   <ItemGroup>
-    <COMReference Include="{215d64d2-031c-33c7-96e3-61794cd1ee61}">
-      <Guid>215d64d2-031c-33c7-96e3-61794cd1ee61</Guid>
-      <VersionMajor>2</VersionMajor>
-      <VersionMinor>4</VersionMinor>
+    <COMReference Include="VSLangProj.dll">
+      <Guid>49a1950e-3e35-4595-8cb9-920c64c44d67</Guid>
+      <VersionMajor>7</VersionMajor>
+      <VersionMinor>0</VersionMinor>
       <WrapperTool>tlbimp</WrapperTool>
+      <Lcid>0</Lcid>
+      <Isolated>false</Isolated>
     </COMReference>
   </ItemGroup>
 

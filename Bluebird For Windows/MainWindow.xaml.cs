@@ -21,6 +21,7 @@ using System.IO.Compression;
 using System.Windows.Media.Animation;
 using System.Net.Mime;
 using System.Security.Cryptography.X509Certificates;
+using Microsoft.VisualBasic;
 
 namespace Bluebird_For_Windows
 {
@@ -169,7 +170,8 @@ namespace Bluebird_For_Windows
                 {
                     pogbox.Text = "Download complete, unzipping " + gameName + "..."; 
                     await Task.Run(() => ZipFile.ExtractToDirectory(folderPath + "\\" + gameName + "\\" + gameZip, folderPath + "\\" + gameName)); 
-                    pogbox.Text = "Unzipping complete, testing ADB..."; 
+                    pogbox.Text = "Unzipping complete...";
+                    string name = Interaction.InputBox();
                     adbCommands(folderPath, gameName, gameID, apkName, obbName);
                 }
             }
