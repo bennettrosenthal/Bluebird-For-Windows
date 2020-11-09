@@ -20,6 +20,7 @@ using System.Diagnostics;
 using System.IO.Compression;
 using System.Windows.Media.Animation;
 using System.Net.Mime;
+using System.Security.Cryptography.X509Certificates;
 
 namespace Bluebird_For_Windows
 {
@@ -156,7 +157,13 @@ namespace Bluebird_For_Windows
 
                 WebClient BBBB = new WebClient();
                 BBBB.DownloadFileCompleted += new AsyncCompletedEventHandler(ayo);
+                BBBB.DownloadProgressChanged += new DownloadProgressChangedEventHandler(yuh);
                 BBBB.DownloadFileAsync(gameDL, folderPath + "\\" + gameName + "\\" + gameZip);
+
+                void yuh(Object sender, DownloadProgressChangedEventArgs e)
+                {
+                    pogbar.Value = e.ProgressPercentage;
+                }
 
                 async void ayo(object sender, AsyncCompletedEventArgs e)
                 {
