@@ -93,7 +93,6 @@ namespace Bluebird_For_Windows
             string gameID = "";
             string apkName = "";
             string obbName = "";
-            string adbFolderName = "";
             foreach (string line in gameArray)
             {
                 if (line.StartsWith("DOWNLOADFROM="))
@@ -141,7 +140,6 @@ namespace Bluebird_For_Windows
 
             // set up download environment
             Uri gameDL = new Uri(gameURL);
-            Uri adbDL = new Uri("https://dl.google.com/android/repository/platform-tools-latest-windows.zip");
             if (Directory.Exists(folderPath + "\\" + gameName))
             {
                 Directory.Delete(folderPath + "\\" + gameName, true);
@@ -152,27 +150,8 @@ namespace Bluebird_For_Windows
             }
             pogbox.Text = "Downloading ADB...";
             Directory.CreateDirectory(folderPath + "\\" + gameName);
-            Directory.CreateDirectory(folderPath + "\\" + "adb");
 
             // declare event handler for the DL, as if we did this syncronised the UI would freeze, and w/o the handler it would just move on
-            WebClient AAAA = new WebClient();
-            AAAA.DownloadFileCompleted += new AsyncCompletedEventHandler(done);
-            AAAA.DownloadFileAsync(adbDL, folderPath);
-
-            // now the rest of our code goes in here, as it will start the code after the async download is completed 
-            async void done(object sender, AsyncCompletedEventArgs e)
-            {
-                string[] files = Directory.GetFiles(folderPath, "platform*");
-                foreach(string file in files)
-                {
-                    if (file.StartsWith("platform"))
-                    {
-                        adbFolderName = file;
-                    }
-                }
-
-                pogbox.Text = "Unzipping ADB...";
-                await Task.Run(() => ZipFile.ExtractToDirectory(folderPath + "\\" + adbFolderName, folderPath + "\\" + "adb"));
                 pogbox.Text = "Downloading game...";
 
                 WebClient BBBB = new WebClient();
@@ -184,16 +163,15 @@ namespace Bluebird_For_Windows
                     pogbox.Text = "Download complete, unzipping " + gameName + "..."; 
                     await Task.Run(() => ZipFile.ExtractToDirectory(folderPath + "\\" + gameName + "\\" + gameZip, folderPath + "\\" + gameName)); 
                     pogbox.Text = "Unzipping complete, testing ADB..."; 
-                    adbCommands(gameID, apkName, obbName);
+                    adbCommands(folderPath, gameName, gameID, apkName, obbName);
                 }
             }
 
-            void adbCommands(string gameID, string apkName, string obbName)
+            void adbCommands(string folderPath, string gameName, string gameID, string apkName, string obbName)
             {
                 string adbLocation = AppDomain.CurrentDomain.BaseDirectory + "\\adb.exe";
                 Process process = new Process();
-                // hides the console window so people dont freak out
-                
+
                 process = System.Diagnostics.Process.Start(adbLocation, "devices");
                 process.WaitForExit();
                 pogbox.Text = "device found";
@@ -230,4 +208,3 @@ namespace Bluebird_For_Windows
             }
         }
     }
-}
