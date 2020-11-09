@@ -14,7 +14,6 @@ using System.Windows.Navigation;
 using System.Windows.Shapes;
 using System.IO;
 using System.Net;
-using System.DirectoryServices.ActiveDirectory;
 using System.ComponentModel;
 using System.Diagnostics;
 using System.IO.Compression;
@@ -22,6 +21,7 @@ using System.Windows.Media.Animation;
 using System.Net.Mime;
 using System.Security.Cryptography.X509Certificates;
 using Microsoft.VisualBasic;
+using System.Windows.Automation;
 
 namespace Bluebird_For_Windows
 {
@@ -36,7 +36,7 @@ namespace Bluebird_For_Windows
 
             // creates program files (x86) directory and, if the txt file exists, deletes it and redownloads it
             Directory.CreateDirectory(Environment.GetFolderPath(Environment.SpecialFolder.ProgramFilesX86) + "\\ModernEra");
-            String folderPath = new string(Environment.GetFolderPath(Environment.SpecialFolder.ProgramFilesX86) + "\\ModernEra");
+            String folderPath = Environment.ExpandEnvironmentVariables("%ProgramFiles(x86)%") + "\\ModernEra";
             WebClient dl = new WebClient();
             Uri txtURL = new Uri("https://thesideloader.co.uk/upsiopts.txt");
             if (File.Exists(folderPath + "\\upsiopts.txt"))
@@ -79,14 +79,14 @@ namespace Bluebird_For_Windows
         private void Button_Click(object sender, RoutedEventArgs e)
         {
             // gets path to data folder
-            String folderPath = new string(Environment.GetFolderPath(Environment.SpecialFolder.ProgramFilesX86) + "\\ModernEra");
+            String folderPath = Environment.ExpandEnvironmentVariables("%ProgramFiles(x86)%") + "\\ModernEra";
             // reads into a string, then splits the string into an array, where each item is a portion of the txt, split by the word "END"
             string txtLines = File.ReadAllText(folderPath + "\\upsiopts.txt");
-            string[] split = txtLines.Split("END");
+            string[] split = txtLines.Split(new string[] { "END" }, StringSplitOptions.None);
             // gets the selected item's index, and because the order of the names will be the same as the one in the txt, 
             // uses it to select the game's array item
             int index = pogcheck.SelectedIndex;
-            string[] gameArray = split[index].Split("\n");
+            string[] gameArray = split[index].Split(new string[] { "\n" }, StringSplitOptions.None);
             
             // getting the required details for download and install
             string gameURL = "";
@@ -95,6 +95,7 @@ namespace Bluebird_For_Windows
             string gameID = "";
             string apkName = "";
             string obbName = "";
+            string txtFileName = "";
             foreach (string line in gameArray)
             {
                 if (line.StartsWith("DOWNLOADFROM="))
@@ -138,6 +139,13 @@ namespace Bluebird_For_Windows
                     string temp2 = temp.Replace("\r", "");
                     obbName = temp2;
                 }
+
+                if (line.StartsWith("INPUTFILENAME="))
+                {
+                    string temp = line.Substring(line.IndexOf("INPUTFILENAME=")).Replace("INPUTFILENAME=", "");
+                    string temp2 = temp.Replace("\r", "");
+                    txtFileName = temp2;
+                }
             }
 
             // set up download environment
@@ -161,22 +169,26 @@ namespace Bluebird_For_Windows
                 BBBB.DownloadProgressChanged += new DownloadProgressChangedEventHandler(yuh);
                 BBBB.DownloadFileAsync(gameDL, folderPath + "\\" + gameName + "\\" + gameZip);
 
-                void yuh(Object sender, DownloadProgressChangedEventArgs e)
+                void yuh(object bender, DownloadProgressChangedEventArgs d)
                 {
-                    pogbar.Value = e.ProgressPercentage;
+                    pogbar.Value = d.ProgressPercentage;
                 }
 
-                async void ayo(object sender, AsyncCompletedEventArgs e)
+                async void ayo(object ender, AsyncCompletedEventArgs f)
                 {
                     pogbox.Text = "Download complete, unzipping " + gameName + "..."; 
                     await Task.Run(() => ZipFile.ExtractToDirectory(folderPath + "\\" + gameName + "\\" + gameZip, folderPath + "\\" + gameName)); 
                     pogbox.Text = "Unzipping complete...";
-                    string name = Interaction.InputBox();
-                    adbCommands(folderPath, gameName, gameID, apkName, obbName);
+                    string name = Interaction.InputBox("What should your name be for " + gameName + "?", "Input Name");
+                    using (System.IO.StreamWriter file = new System.IO.StreamWriter(@Environment.GetFolderPath(Environment.SpecialFolder.ProgramFilesX86) + "\\ModernEra\\name.txt", true))
+                    {
+                        file.WriteLine(name);
+                    }
+                    adbCommands(folderPath, gameName, gameID, apkName, obbName, txtFileName);
                 }
             }
 
-            void adbCommands(string folderPath, string gameName, string gameID, string apkName, string obbName)
+            void adbCommands(string folderPath, string gameName, string gameID, string apkName, string obbName, string txtFileName)
             {
                 string adbLocation = AppDomain.CurrentDomain.BaseDirectory + "\\adb.exe";
                 Process process = new Process();
@@ -203,12 +215,12 @@ namespace Bluebird_For_Windows
                 process.WaitForExit();
                 pogbox.Text = "Permissions set! Pushing OBB...";
 
-                process = System.Diagnostics.Process.Start(adbLocation, "-d push " + folderPath + "\\" + gameName + "\\" + obbName);
+                process = System.Diagnostics.Process.Start(adbLocation, "-d push " + folderPath + "\\" + gameName + "\\" + obbName + " /sdcard/Android/obb/" + gameID);
                 process.WaitForExit();
                 pogbox.Text = "Setting name...";
 
-                // ADD NAMES HERE WHEN YOU CAN BE BOTHERED
-
+                process = System.Diagnostics.Process.Start(adbLocation, "-d push " + folderPath + "\\" + "name.txt" + " /sdcard/" + txtFileName);
+                process.WaitForExit();
                 pogbox.Text = gameName + " installed!";
                 foreach (var bitch in Process.GetProcessesByName("adb"))
                 {
