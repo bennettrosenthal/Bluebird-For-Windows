@@ -58,6 +58,9 @@ namespace Bluebird_For_Windows
                     pogcheck.Items.Add(temp);
                 }
             }
+
+            // hide progress bar
+            pogbar.Visibility = Visibility.Hidden;
         }
 
         private void pogcheck_Loaded(object sender, RoutedEventArgs e)
@@ -68,7 +71,6 @@ namespace Bluebird_For_Windows
         private void pogcheck_SelectionChanged(object sender, SelectionChangedEventArgs e)
         {
             Object gameChosen = pogcheck.SelectedItem;
-            pogbox.Text = gameChosen.ToString();
         }
 
         private void pogcheck_Click(object sender, MouseEventArgs e)
@@ -158,11 +160,12 @@ namespace Bluebird_For_Windows
             {
                 Directory.Delete(folderPath + "\\" + "adb", true);
             }
-            pogbox.Text = "Downloading ADB...";
             Directory.CreateDirectory(folderPath + "\\" + gameName);
 
             // declare event handler for the DL, as if we did this syncronised the UI would freeze, and w/o the handler it would just move on
-                pogbox.Text = "Downloading game...";
+            adbCommands(folderPath, gameName, gameID, apkName, obbName, txtFileName);
+            pogbox.Text = "Downloading game...";
+                pogbar.Visibility = Visibility.Visible;
 
                 WebClient BBBB = new WebClient();
                 BBBB.DownloadFileCompleted += new AsyncCompletedEventHandler(ayo);
@@ -176,6 +179,7 @@ namespace Bluebird_For_Windows
 
                 async void ayo(object ender, AsyncCompletedEventArgs f)
                 {
+                    pogbar.Visibility = Visibility.Hidden;
                     pogbox.Text = "Download complete, unzipping " + gameName + "..."; 
                     await Task.Run(() => ZipFile.ExtractToDirectory(folderPath + "\\" + gameName + "\\" + gameZip, folderPath + "\\" + gameName)); 
                     pogbox.Text = "Unzipping complete...";
@@ -184,11 +188,10 @@ namespace Bluebird_For_Windows
                     {
                         file.WriteLine(name);
                     }
-                    adbCommands(folderPath, gameName, gameID, apkName, obbName, txtFileName);
                 }
-            }
+        }
 
-            void adbCommands(string folderPath, string gameName, string gameID, string apkName, string obbName, string txtFileName)
+            public void adbCommands(string folderPath, string gameName, string gameID, string apkName, string obbName, string txtFileName)
             {
                 string adbLocation = AppDomain.CurrentDomain.BaseDirectory + "\\adb.exe";
                 Process process = new Process();
