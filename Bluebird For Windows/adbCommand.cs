@@ -8,20 +8,7 @@ public class adbCommand
     {
         string adbLocation = AppDomain.CurrentDomain.BaseDirectory + "\\adb.exe";
         Process process = new Process();
-        process.StartInfo.RedirectStandardOutput = true;
 
-        ProcessStartInfo ugh = new ProcessStartInfo();
-        ugh.FileName = adbLocation;
-        ugh.Arguments = "install " + folderPath + "\\" + gameName + "\\" + apkName;
-        ugh.RedirectStandardOutput = true;
-        ugh.RedirectStandardError = true;
-        ugh.UseShellExecute = false;
-        ugh.Verb = "runas";
-        process.StartInfo = ugh;
-        process.Start();
-        process.WaitForExit();
-        Debug.WriteLine(process.StandardError.ReadToEnd());
-        /*
         process = System.Diagnostics.Process.Start(adbLocation, "devices");
         process.WaitForExit();
         pogbox.Text = "device found";
@@ -30,7 +17,7 @@ public class adbCommand
         process.WaitForExit();
         pogbox.Text = gameName + " uninstalled! Installing APK...";
 
-        process = System.Diagnostics.Process.Start(adbLocation, "install " + folderPath + "\\" + gameName + "\\" + apkName);
+        process = System.Diagnostics.Process.Start(adbLocation, "install \"" + folderPath + "\\" + gameName + "\\" + apkName + "\"");
         process.WaitForExit();
         pogbox.Text = "APK Installed! Setting permissions...";
 
@@ -44,11 +31,11 @@ public class adbCommand
         process.WaitForExit();
         pogbox.Text = "Permissions set! Pushing OBB...";
 
-        process = System.Diagnostics.Process.Start(adbLocation, "-d push " + folderPath + "\\" + gameName + "\\" + obbName + " /sdcard/Android/obb/" + gameID);
+        process = System.Diagnostics.Process.Start(adbLocation, "-d push \"" + folderPath + "\\" + gameName + "\\" + obbName + "\" /sdcard/Android/obb/" + gameID);
         process.WaitForExit();
         pogbox.Text = "Setting name...";
 
-        process = System.Diagnostics.Process.Start(adbLocation, "-d push " + folderPath + "\\" + "name.txt" + " /sdcard/" + txtFileName);
+        process = System.Diagnostics.Process.Start(adbLocation, "-d push \"" + folderPath + "\\" + "name.txt\"" + " /sdcard/" + txtFileName);
         pogbox.Text = process.StandardOutput.ReadToEnd();
         process.WaitForExit();
         pogbox.Text = gameName + " installed!";
@@ -56,6 +43,5 @@ public class adbCommand
         {
             bitch.Kill();
         }
-        */
     }
 }

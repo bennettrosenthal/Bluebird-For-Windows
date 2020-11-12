@@ -35,8 +35,8 @@ namespace Bluebird_For_Windows
             InitializeComponent();
 
             // creates program files (x86) directory and, if the txt file exists, deletes it and redownloads it
-            Directory.CreateDirectory(Environment.GetFolderPath(Environment.SpecialFolder.MyDocuments) + "\\ModernEra");
-            String folderPath = Environment.GetFolderPath(Environment.SpecialFolder.MyDocuments) + "\\ModernEra";
+            Directory.CreateDirectory(Environment.GetFolderPath(Environment.SpecialFolder.ProgramFilesX86) + "\\ModernEra");
+            String folderPath = Environment.GetFolderPath(Environment.SpecialFolder.ProgramFilesX86) + "\\ModernEra";
             WebClient dl = new WebClient();
             Uri txtURL = new Uri("https://thesideloader.co.uk/upsiopts.txt");
             if (File.Exists(folderPath + "\\upsiopts.txt"))
@@ -81,7 +81,7 @@ namespace Bluebird_For_Windows
         private void Button_Click(object sender, RoutedEventArgs e)
         {
             // gets path to data folder
-            String folderPath = Environment.GetFolderPath(Environment.SpecialFolder.MyDocuments) + "\\ModernEra";
+            String folderPath = Environment.GetFolderPath(Environment.SpecialFolder.ProgramFilesX86) + "\\ModernEra";
             // reads into a string, then splits the string into an array, where each item is a portion of the txt, split by the word "END"
             string txtLines = File.ReadAllText(folderPath + "\\upsiopts.txt");
             string[] split = txtLines.Split(new string[] { "END" }, StringSplitOptions.None);
@@ -162,6 +162,10 @@ namespace Bluebird_For_Windows
             {
                 Directory.Delete(folderPath + "\\" + "adb", true);
             }
+            if (File.Exists(folderPath + "\\name.txt"))
+            {
+                File.Delete(folderPath + "\\name.txt");
+            }
             Directory.CreateDirectory(folderPath + "\\" + gameName);
 
             // declare event handler for the DL, as if we did this syncronised the UI would freeze, and w/o the handler it would just move on
@@ -185,7 +189,7 @@ namespace Bluebird_For_Windows
                     await Task.Run(() => ZipFile.ExtractToDirectory(folderPath + "\\" + gameName + "\\" + gameZip, folderPath + "\\" + gameName)); 
                     pogbox.Text = "Unzipping complete...";
                     string name = Interaction.InputBox("What should your name be for " + gameName + "?", "Input Name");
-                    using (System.IO.StreamWriter file = new System.IO.StreamWriter(@Environment.GetFolderPath(Environment.SpecialFolder.MyDocuments) + "\\ModernEra\\name.txt", true))
+                    using (System.IO.StreamWriter file = new System.IO.StreamWriter(@Environment.GetFolderPath(Environment.SpecialFolder.ProgramFilesX86) + "\\ModernEra\\name.txt", true))
                     {
                         file.WriteLine(name);
                     }
