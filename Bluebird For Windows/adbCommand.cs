@@ -13,14 +13,14 @@ public class adbCommand
         ProcessStartInfo ugh = new ProcessStartInfo();
         ugh.FileName = adbLocation;
         ugh.Arguments = "install " + folderPath + "\\" + gameName + "\\" + apkName;
-        // ugh.RedirectStandardOutput = true;
-        // ugh.RedirectStandardError = true;
-        ugh.UseShellExecute = true;
+        ugh.RedirectStandardOutput = true;
+        ugh.RedirectStandardError = true;
+        ugh.UseShellExecute = false;
         ugh.Verb = "runas";
         process.StartInfo = ugh;
         process.Start();
         process.WaitForExit();
-        // Debug.WriteLine(process.StandardError.ReadToEnd());
+        Debug.WriteLine(process.StandardError.ReadToEnd());
         /*
         process = System.Diagnostics.Process.Start(adbLocation, "devices");
         process.WaitForExit();
