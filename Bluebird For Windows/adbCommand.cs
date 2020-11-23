@@ -8,37 +8,74 @@ public class adbCommand
     {
         string adbLocation = AppDomain.CurrentDomain.BaseDirectory + "\\adb.exe";
         Process process = new Process();
-
-        process = System.Diagnostics.Process.Start(adbLocation, "devices");
+        process.StartInfo.WindowStyle = ProcessWindowStyle.Hidden;
+        process.StartInfo.CreateNoWindow = true;
+        process.StartInfo.FileName = adbLocation;
+        process.StartInfo.Arguments = "devices";
+        process.Start();
         process.WaitForExit();
-        pogbox.Text = "device found";
+        //pogbox.Text = "device found";
 
-        process = System.Diagnostics.Process.Start(adbLocation, "uninstall " + gameID);
-        process.WaitForExit();
-        pogbox.Text = gameName + " uninstalled! Installing APK...";
+        Process processayo = new Process();
+        processayo.StartInfo.WindowStyle = ProcessWindowStyle.Hidden;
+        processayo.StartInfo.CreateNoWindow = true;
+        processayo.StartInfo.FileName = adbLocation;
+        processayo.StartInfo.Arguments = "uninstall " + gameID;
+        processayo.Start();
+        processayo.WaitForExit();
+        //pogbox.Text = gameName + " uninstalled! Installing APK...";
 
-        process = System.Diagnostics.Process.Start(adbLocation, "install \"" + folderPath + "\\" + gameName + "\\" + apkName + "\"");
-        process.WaitForExit();
-        pogbox.Text = "APK Installed! Setting permissions...";
+        Process processda = new Process();
+        processda.StartInfo.WindowStyle = ProcessWindowStyle.Hidden;
+        processda.StartInfo.CreateNoWindow = true;
+        processda.StartInfo.FileName = adbLocation;
+        processda.StartInfo.Arguments = "install \"" + folderPath + "\\" + gameName + "\\" + apkName + "\"";
+        processda.Start();
+        processda.WaitForExit();
+        //pogbox.Text = "APK Installed! Setting permissions...";
 
-        process = System.Diagnostics.Process.Start(adbLocation, "-d shell pm grant " + gameID + " android.permission.RECORD_AUDIO");
-        process.WaitForExit();
+        Process processpizza = new Process();
+        processpizza.StartInfo.WindowStyle = ProcessWindowStyle.Hidden;
+        processpizza.StartInfo.CreateNoWindow = true;
+        processpizza.StartInfo.FileName = adbLocation;
+        processpizza.StartInfo.Arguments = "-d shell pm grant " + gameID + " android.permission.RECORD_AUDIO";
+        processpizza.Start();
+        processpizza.WaitForExit();
 
-        process = System.Diagnostics.Process.Start(adbLocation, "-d shell pm grant " + gameID + " android.permission.READ_EXTERNAL_STORAGE");
-        process.WaitForExit();
+        Process processhere = new Process();
+        processhere.StartInfo.WindowStyle = ProcessWindowStyle.Hidden;
+        processhere.StartInfo.CreateNoWindow = true;
+        processhere.StartInfo.FileName = adbLocation;
+        processhere.StartInfo.Arguments = "-d shell pm grant " + gameID + " android.permission.READ_EXTERNAL_STORAGE";
+        processhere.Start();
+        processhere.WaitForExit();
 
-        process = System.Diagnostics.Process.Start(adbLocation, "-d shell pm grant " + gameID + " android.permission.WRITE_EXTERNAL_STORAGE");
-        process.WaitForExit();
-        pogbox.Text = "Permissions set! Pushing OBB...";
+        Process processpog = new Process();
+        processpog.StartInfo.WindowStyle = ProcessWindowStyle.Hidden;
+        processpog.StartInfo.CreateNoWindow = true;
+        processpog.StartInfo.FileName = adbLocation;
+        processpog.StartInfo.Arguments = "-d shell pm grant " + gameID + " android.permission.WRITE_EXTERNAL_STORAGE";
+        processpog.Start();
+        processpog.WaitForExit();
+        //pogbox.Text = "Permissions set! Pushing OBB...";
 
-        process = System.Diagnostics.Process.Start(adbLocation, "-d push \"" + folderPath + "\\" + gameName + "\\" + obbName + "\" /sdcard/Android/obb/" + gameID);
-        process.WaitForExit();
-        pogbox.Text = "Setting name...";
+        Process processmonkaS = new Process();
+        processmonkaS.StartInfo.WindowStyle = ProcessWindowStyle.Hidden;
+        processmonkaS.StartInfo.CreateNoWindow = true;
+        processmonkaS.StartInfo.FileName = adbLocation;
+        processmonkaS.StartInfo.Arguments = "-d push \"" + folderPath + "\\" + gameName + "\\" + obbName + "\" /sdcard/Android/obb/" + gameID + "/" + obbName;
+        processmonkaS.Start();
+        processmonkaS.WaitForExit();
+        //pogbox.Text = "Setting name...";
 
-        process = System.Diagnostics.Process.Start(adbLocation, "-d push \"" + folderPath + "\\" + "name.txt\"" + " /sdcard/" + txtFileName);
-        pogbox.Text = process.StandardOutput.ReadToEnd();
-        process.WaitForExit();
-        pogbox.Text = gameName + " installed!";
+        Process processfinal = new Process();
+        processfinal.StartInfo.WindowStyle = ProcessWindowStyle.Hidden;
+        processfinal.StartInfo.CreateNoWindow = true;
+        processfinal.StartInfo.FileName = adbLocation;
+        processfinal.StartInfo.Arguments = "-d push \"" + folderPath + "\\" + "name.txt\"" + " /sdcard/" + txtFileName;
+        processfinal.Start();
+        processfinal.WaitForExit();
+        //pogbox.Text = gameName + " installed!";
         foreach (var bitch in Process.GetProcessesByName("adb"))
         {
             bitch.Kill();

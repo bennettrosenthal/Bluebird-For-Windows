@@ -151,8 +151,7 @@ namespace Bluebird_For_Windows
             }
 
             // set up download environment
-            //adbCommand pog = new adbCommand();
-            //pog.adbCommands(folderPath, gameName, gameID, apkName, obbName, txtFileName, pogbox);
+
             Uri gameDL = new Uri(gameURL);
             if (Directory.Exists(folderPath + "\\" + gameName))
             {
@@ -169,13 +168,15 @@ namespace Bluebird_For_Windows
             Directory.CreateDirectory(folderPath + "\\" + gameName);
 
             // declare event handler for the DL, as if we did this syncronised the UI would freeze, and w/o the handler it would just move on
-                pogbox.Text = "Downloading game...";
-                pogbar.Visibility = Visibility.Visible;
+            //adbCommand pog = new adbCommand();
+            //pog.adbCommands(folderPath, gameName, gameID, apkName, obbName, txtFileName, pogbox);
+            pogbox.Text = "Downloading game...";
+            pogbar.Visibility = Visibility.Visible;
 
-                WebClient BBBB = new WebClient();
-                BBBB.DownloadFileCompleted += new AsyncCompletedEventHandler(ayo);
-                BBBB.DownloadProgressChanged += new DownloadProgressChangedEventHandler(yuh);
-                BBBB.DownloadFileAsync(gameDL, folderPath + "\\" + gameName + "\\" + gameZip);
+            WebClient BBBB = new WebClient();
+            BBBB.DownloadFileCompleted += new AsyncCompletedEventHandler(ayo);
+            BBBB.DownloadProgressChanged += new DownloadProgressChangedEventHandler(yuh);
+            BBBB.DownloadFileAsync(gameDL, folderPath + "\\" + gameName + "\\" + gameZip);
 
                 void yuh(object bender, DownloadProgressChangedEventArgs d)
                 {
@@ -194,7 +195,7 @@ namespace Bluebird_For_Windows
                         file.WriteLine(name);
                     }
                     adbCommand pog = new adbCommand();
-                    pog.adbCommands(folderPath, gameName, gameID, apkName, obbName, txtFileName, pogbox);
+                    await Task.Run(() => pog.adbCommands(folderPath, gameName, gameID, apkName, obbName, txtFileName, pogbox));
             }
         }
 
