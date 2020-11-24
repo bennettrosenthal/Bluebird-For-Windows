@@ -7,13 +7,13 @@
         mc:Ignorable="d"
         Title="Bluebird For Windows" Height="450" Width="800">
     <Grid>
-        <ComboBox Name="pogcheck" HorizontalAlignment="Center" Margin="255,175,254,0" VerticalAlignment="Top" Width="284" Loaded="pogcheck_Loaded" PreviewMouseDown="pogcheck_Click" SelectionChanged="pogcheck_SelectionChanged" Height="22"/>
+        <ComboBox Name="pogcheck" Margin="255,175,254,0" VerticalAlignment="Top" Loaded="pogcheck_Loaded" PreviewMouseDown="pogcheck_Click" SelectionChanged="pogcheck_SelectionChanged" Height="22"/>
         <Button Content="Install Game" Margin="113,274,566.6,0" VerticalAlignment="Top" Height="36" Click="Button_Click"/>
         <TextBlock HorizontalAlignment="Center" Text="Please select a game." TextWrapping="Wrap" VerticalAlignment="Top" Margin="335,151,334.6,0"/>
-        <ProgressBar Name="pogbar" HorizontalAlignment="Stretch" Margin="255,203,254.6,201" VerticalAlignment="Stretch" Width="Auto"/>
+        <ProgressBar Name="pogbar" HorizontalAlignment="Stretch" Margin="255,203,254.6,201" Width="Auto"/>
         <TextBlock HorizontalAlignment="Left" Margin="281,10,0,0" TextWrapping="Wrap" Text="Bluebird for Windows" VerticalAlignment="Top" FontSize="24"/>
         <TextBlock HorizontalAlignment="Left" Margin="335,38,0,0" TextWrapping="Wrap" Text="by Modern Era" VerticalAlignment="Top" FontSize="18" FontStyle="Italic"/>
-        <TextBlock Name="pogbox" Margin="217,67,218.6,0" TextWrapping="Wrap" Text="" VerticalAlignment="Top" Height="79"/>
+        <TextBlock Name="pogbox" Margin="216,82,216,0" TextWrapping="Wrap" Text="" VerticalAlignment="Top" TextAlignment="Center" Height="40"/>
         <Button Name="uninstallButton" Content="Uninstall Game" Margin="566,274,113.6,0" VerticalAlignment="Top" Height="36"/>
     </Grid>
 </Window>
