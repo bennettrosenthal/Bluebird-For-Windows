@@ -199,6 +199,33 @@ namespace Bluebird_For_Windows
             }
         }
 
-            
+        private void uninstallButton_Click(object sender, RoutedEventArgs e)
+        {
+            // gets path to data folder
+            String folderPath = Environment.GetFolderPath(Environment.SpecialFolder.ProgramFilesX86) + "\\ModernEra";
+            // reads into a string, then splits the string into an array, where each item is a portion of the txt, split by the word "END"
+            string txtLines = File.ReadAllText(folderPath + "\\upsiopts.txt");
+            string[] split = txtLines.Split(new string[] { "END" }, StringSplitOptions.None);
+            // gets the selected item's index, and because the order of the names will be the same as the one in the txt, 
+            // uses it to select the game's array item
+            int index = pogcheck.SelectedIndex;
+            string[] gameArray = split[index].Split(new string[] { "\n" }, StringSplitOptions.None);
+
+            string gameID = "";
+
+            foreach (string line in gameArray)
+            {
+                if (line.StartsWith("COMOBJECT="))
+                {
+                    string temp = line.Substring(line.IndexOf("COMOBJECT=")).Replace("COMOBJECT=", "");
+                    string temp2 = temp.Replace("\r", "");
+                    gameID = temp2;
+                }
+            }
+            pogbox.Text = "Uninstalling " + gameID + "...";
+            adbCommand un = new adbCommand();
+            un.uninstall(gameID);
+            pogbox.Text = gameID + " uninstalled!";
         }
+    }
     }

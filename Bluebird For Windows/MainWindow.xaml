@@ -7,12 +7,13 @@
         mc:Ignorable="d"
         Title="Bluebird For Windows" Height="450" Width="800">
     <Grid>
-        <ComboBox Name="pogcheck" HorizontalAlignment="Center" Margin="0,231,0,0" VerticalAlignment="Top" Width="284" Loaded="pogcheck_Loaded" PreviewMouseDown="pogcheck_Click" SelectionChanged="pogcheck_SelectionChanged"/>
-        <Button Content="Go!" HorizontalAlignment="Center" Margin="0,308,0,0" VerticalAlignment="Top" Height="40" Width="125" Click="Button_Click"/>
-        <TextBlock HorizontalAlignment="Center" Text="Please select a game." TextWrapping="Wrap" VerticalAlignment="Top" Height="20" Width="124" Margin="0,204,0,0"/>
-        <ProgressBar Name="pogbar" HorizontalAlignment="Center" Height="10" Margin="0,364,0,0" VerticalAlignment="Top" Width="284"/>
-        <TextBlock HorizontalAlignment="Left" Margin="281,10,0,0" TextWrapping="Wrap" Text="Bluebird for Windows" VerticalAlignment="Top" Height="37" Width="230" FontSize="24"/>
+        <ComboBox Name="pogcheck" HorizontalAlignment="Center" Margin="255,175,254,0" VerticalAlignment="Top" Width="284" Loaded="pogcheck_Loaded" PreviewMouseDown="pogcheck_Click" SelectionChanged="pogcheck_SelectionChanged" Height="22"/>
+        <Button Content="Install Game" Margin="113,274,566.6,0" VerticalAlignment="Top" Height="36" Click="Button_Click"/>
+        <TextBlock HorizontalAlignment="Center" Text="Please select a game." TextWrapping="Wrap" VerticalAlignment="Top" Margin="335,151,334.6,0"/>
+        <ProgressBar Name="pogbar" HorizontalAlignment="Stretch" Margin="255,203,254.6,201" VerticalAlignment="Stretch" Width="Auto"/>
+        <TextBlock HorizontalAlignment="Left" Margin="281,10,0,0" TextWrapping="Wrap" Text="Bluebird for Windows" VerticalAlignment="Top" FontSize="24"/>
         <TextBlock HorizontalAlignment="Left" Margin="335,38,0,0" TextWrapping="Wrap" Text="by Modern Era" VerticalAlignment="Top" FontSize="18" FontStyle="Italic"/>
-        <TextBlock Name="pogbox" HorizontalAlignment="Left" Margin="281,98,0,0" TextWrapping="Wrap" Text="" VerticalAlignment="Top" Height="79" Width="230"/>
+        <TextBlock Name="pogbox" Margin="217,67,218.6,0" TextWrapping="Wrap" Text="" VerticalAlignment="Top" Height="79"/>
+        <Button Name="uninstallButton" Content="Uninstall Game" Margin="566,274,113.6,0" VerticalAlignment="Top" Height="36"/>
     </Grid>
 </Window>
