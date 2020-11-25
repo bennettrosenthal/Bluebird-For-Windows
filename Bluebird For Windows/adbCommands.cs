@@ -2,19 +2,12 @@
 using System.Diagnostics;
 using System.Windows.Controls;
 
-public class adbCommand
-{
-    public void adbCommands(string folderPath, string gameName, string gameID, string apkName, string obbName, string txtFileName, TextBlock pogbox)
-    {
-        string adbLocation = AppDomain.CurrentDomain.BaseDirectory + "\\adb.exe";
-        Process process = new Process();
-        process.StartInfo.WindowStyle = ProcessWindowStyle.Hidden;
-        process.StartInfo.CreateNoWindow = true;
-        process.StartInfo.FileName = adbLocation;
-        process.StartInfo.Arguments = "devices";
-        process.Start();
-        process.WaitForExit();
+public class adbCommands
+{   
+    public string adbLocation = AppDomain.CurrentDomain.BaseDirectory + "\\adb.exe";
 
+    public void uninstall(string gameID)
+    {
         Process processayo = new Process();
         processayo.StartInfo.WindowStyle = ProcessWindowStyle.Hidden;
         processayo.StartInfo.CreateNoWindow = true;
@@ -22,7 +15,10 @@ public class adbCommand
         processayo.StartInfo.Arguments = "uninstall " + gameID;
         processayo.Start();
         processayo.WaitForExit();
+    }
 
+    public void installAPK(string folderPath, string gameName, string apkName)
+    {
         Process processda = new Process();
         processda.StartInfo.WindowStyle = ProcessWindowStyle.Hidden;
         processda.StartInfo.CreateNoWindow = true;
@@ -30,7 +26,10 @@ public class adbCommand
         processda.StartInfo.Arguments = "install \"" + folderPath + "\\" + gameName + "\\" + apkName + "\"";
         processda.Start();
         processda.WaitForExit();
+    }
 
+    public void grantPermissions(string gameID)
+    {
         Process processpizza = new Process();
         processpizza.StartInfo.WindowStyle = ProcessWindowStyle.Hidden;
         processpizza.StartInfo.CreateNoWindow = true;
@@ -54,7 +53,10 @@ public class adbCommand
         processpog.StartInfo.Arguments = "-d shell pm grant " + gameID + " android.permission.WRITE_EXTERNAL_STORAGE";
         processpog.Start();
         processpog.WaitForExit();
+    }
 
+    public void pushOBB(string folderPath, string gameName, string obbName, string gameID)
+    {
         Process processmonkaS = new Process();
         processmonkaS.StartInfo.WindowStyle = ProcessWindowStyle.Hidden;
         processmonkaS.StartInfo.CreateNoWindow = true;
@@ -62,7 +64,10 @@ public class adbCommand
         processmonkaS.StartInfo.Arguments = "-d push \"" + folderPath + "\\" + gameName + "\\" + obbName + "\" /sdcard/Android/obb/" + gameID + "/" + obbName;
         processmonkaS.Start();
         processmonkaS.WaitForExit();
+    }
 
+    public void pushName(string folderPath, string txtFileName)
+    {
         Process processfinal = new Process();
         processfinal.StartInfo.WindowStyle = ProcessWindowStyle.Hidden;
         processfinal.StartInfo.CreateNoWindow = true;
@@ -70,21 +75,13 @@ public class adbCommand
         processfinal.StartInfo.Arguments = "-d push \"" + folderPath + "\\" + "name.txt\"" + " /sdcard/" + txtFileName;
         processfinal.Start();
         processfinal.WaitForExit();
-        foreach (var bitch in Process.GetProcessesByName("adb"))
-        {
-            bitch.Kill();
-        }
     }
 
-    public void uninstall(string gameID)
+    public void killADB()
     {
-        string adbLocation = AppDomain.CurrentDomain.BaseDirectory + "\\adb.exe";
-        Process processayo = new Process();
-        processayo.StartInfo.WindowStyle = ProcessWindowStyle.Hidden;
-        processayo.StartInfo.CreateNoWindow = true;
-        processayo.StartInfo.FileName = adbLocation;
-        processayo.StartInfo.Arguments = "uninstall " + gameID;
-        processayo.Start();
-        processayo.WaitForExit();
+        foreach (var process in Process.GetProcessesByName("adb"))
+        {
+            process.Kill();
+        }
     }
 }

@@ -194,12 +194,22 @@ namespace Bluebird_For_Windows
                     {
                         file.WriteLine(name);
                     }
-                    adbCommand pog = new adbCommand();
-                    await Task.Run(() => pog.adbCommands(folderPath, gameName, gameID, apkName, obbName, txtFileName, pogbox));
+                    
+                    adbCommands pog = new adbCommands();
+                    pog.uninstall(gameID);
+                    pogbox.Text = gameName + "uninstalled if present! Installing APK...";
+                    pog.installAPK(folderPath, gameName, apkName);
+                    pogbox.Text = "APK installed! Setting permissions...";
+                    pog.grantPermissions(gameID);
+                    pogbox.Text = "Permissions set! Pushing OBB...";
+                    pog.pushOBB(folderPath, gameName, obbName, gameID);
+                    pogbox.Text = "OBB pushed! Setting name...";
+                    pog.pushName(folderPath, txtFileName);
+                    pogbox.Text = gameName + "installed!";
             }
         }
 
-        private void uninstallButton_Click(object sender, RoutedEventArgs e)
+        async void uninstallButton_Click(object sender, RoutedEventArgs e)
         {
             // gets path to data folder
             String folderPath = Environment.GetFolderPath(Environment.SpecialFolder.ProgramFilesX86) + "\\ModernEra";
@@ -212,6 +222,7 @@ namespace Bluebird_For_Windows
             string[] gameArray = split[index].Split(new string[] { "\n" }, StringSplitOptions.None);
 
             string gameID = "";
+            string gameName = "";
 
             foreach (string line in gameArray)
             {
@@ -221,11 +232,102 @@ namespace Bluebird_For_Windows
                     string temp2 = temp.Replace("\r", "");
                     gameID = temp2;
                 }
+
+                if (line.StartsWith("NAME="))
+                {
+                    string temp = line.Substring(line.IndexOf("NAME=")).Replace("NAME=", "");
+                    string temp2 = temp.Replace("\r", "");
+                    gameName = temp2;
+                }
             }
-            pogbox.Text = "Uninstalling " + gameID + "...";
-            adbCommand un = new adbCommand();
-            un.uninstall(gameID);
-            pogbox.Text = gameID + " uninstalled!";
+            pogbox.Text = "Uninstalling " + gameName + "...";
+            adbCommands un = new adbCommands();
+            await Task.Run(() => un.uninstall(gameID));
+            pogbox.Text = gameName + " uninstalled!";
+        }
+
+        async void permissionsButton_Click(object sender, RoutedEventArgs e)
+        {
+            // gets path to data folder
+            String folderPath = Environment.GetFolderPath(Environment.SpecialFolder.ProgramFilesX86) + "\\ModernEra";
+            // reads into a string, then splits the string into an array, where each item is a portion of the txt, split by the word "END"
+            string txtLines = File.ReadAllText(folderPath + "\\upsiopts.txt");
+            string[] split = txtLines.Split(new string[] { "END" }, StringSplitOptions.None);
+            // gets the selected item's index, and because the order of the names will be the same as the one in the txt, 
+            // uses it to select the game's array item
+            int index = pogcheck.SelectedIndex;
+            string[] gameArray = split[index].Split(new string[] { "\n" }, StringSplitOptions.None);
+
+            string gameID = "";
+            string gameName = "";
+
+            foreach (string line in gameArray)
+            {
+                if (line.StartsWith("COMOBJECT="))
+                {
+                    string temp = line.Substring(line.IndexOf("COMOBJECT=")).Replace("COMOBJECT=", "");
+                    string temp2 = temp.Replace("\r", "");
+                    gameID = temp2;
+                }
+
+                if (line.StartsWith("NAME="))
+                {
+                    string temp = line.Substring(line.IndexOf("NAME=")).Replace("NAME=", "");
+                    string temp2 = temp.Replace("\r", "");
+                    gameName = temp2;
+                }
+            }
+
+            pogbox.Text = "Setting permissions for " + gameID + "...";
+            adbCommands perms = new adbCommands();
+            await Task.Run(() => perms.grantPermissions(gameID));
+            pogbox.Text = "Permissions set for " + gameName + "!";
+        }
+
+        async void nameButton_Click(object sender, RoutedEventArgs e)
+        {
+            // gets path to data folder
+            String folderPath = Environment.GetFolderPath(Environment.SpecialFolder.ProgramFilesX86) + "\\ModernEra";
+            // reads into a string, then splits the string into an array, where each item is a portion of the txt, split by the word "END"
+            string txtLines = File.ReadAllText(folderPath + "\\upsiopts.txt");
+            string[] split = txtLines.Split(new string[] { "END" }, StringSplitOptions.None);
+            // gets the selected item's index, and because the order of the names will be the same as the one in the txt, 
+            // uses it to select the game's array item
+            int index = pogcheck.SelectedIndex;
+            string[] gameArray = split[index].Split(new string[] { "\n" }, StringSplitOptions.None);
+
+            string txtFileName = "";
+            string gameName = "";
+
+            foreach (string line in gameArray)
+            {
+                if (line.StartsWith("INPUTFILENAME="))
+                {
+                    string temp = line.Substring(line.IndexOf("INPUTFILENAME=")).Replace("INPUTFILENAME=", "");
+                    string temp2 = temp.Replace("\r", "");
+                    txtFileName = temp2;
+                }
+
+                if (line.StartsWith("NAME="))
+                {
+                    string temp = line.Substring(line.IndexOf("NAME=")).Replace("NAME=", "");
+                    string temp2 = temp.Replace("\r", "");
+                    gameName = temp2;
+                }
+            }
+            
+            if (File.Exists(folderPath + "\\name.txt"))
+            {
+                File.Delete(folderPath + "\\name.txt");
+            }
+            string name = Interaction.InputBox("What should your name be for " + gameName + "?", "Input Name");
+            using (System.IO.StreamWriter file = new System.IO.StreamWriter(@Environment.GetFolderPath(Environment.SpecialFolder.ProgramFilesX86) + "\\ModernEra\\name.txt", true))
+            {
+                file.WriteLine(name);
+            }
+            adbCommands nam = new adbCommands();
+            nam.pushName(folderPath, txtFileName);
+            pogbox.Text = "Name set for " + gameName + "!"; 
         }
     }
     }
