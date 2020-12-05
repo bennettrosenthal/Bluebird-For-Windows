@@ -205,6 +205,12 @@ namespace Bluebird_For_Windows
                     await Task.Run(() => pog.pushOBB(folderPath, gameName, obbName, gameID));
                     pogbox.Text = "OBB pushed! Setting name...";
                     await Task.Run(() => pog.pushName(folderPath, txtFileName));
+                    pog.killADB();
+
+                    if (Directory.Exists(folderPath + "\\" + gameName))
+                    {
+                        Directory.Delete(folderPath + "\\" + gameName, true);
+                    }
                     pogbox.Text = gameName + " installed!";
             }
         }
@@ -243,6 +249,7 @@ namespace Bluebird_For_Windows
             pogbox.Text = "Uninstalling " + gameName + "...";
             adbCommands un = new adbCommands();
             await Task.Run(() => un.uninstall(gameID));
+            un.killADB();
             pogbox.Text = gameName + " uninstalled!";
         }
 
@@ -281,6 +288,7 @@ namespace Bluebird_For_Windows
             pogbox.Text = "Setting permissions for " + gameID + "...";
             adbCommands perms = new adbCommands();
             await Task.Run(() => perms.grantPermissions(gameID));
+            perms.killADB();
             pogbox.Text = "Permissions set for " + gameName + "!";
         }
 
@@ -327,6 +335,7 @@ namespace Bluebird_For_Windows
             }
             adbCommands nam = new adbCommands();
             await Task.Run(() => nam.pushName(folderPath, txtFileName));
+            nam.killADB();
             pogbox.Text = "Name set for " + gameName + "!"; 
         }
 
@@ -345,6 +354,7 @@ namespace Bluebird_For_Windows
 
                 adbCommands map = new adbCommands();
                 await Task.Run(() => map.pushMap(mapName, mapDir));
+                map.killADB();
                 pogbox.Text = mapName + " pushed!";
             }
         }
