@@ -77,7 +77,7 @@ public class adbCommands
         processfinal.StartInfo.WindowStyle = ProcessWindowStyle.Hidden;
         processfinal.StartInfo.CreateNoWindow = true;
         processfinal.StartInfo.FileName = adbLocation;
-        processfinal.StartInfo.Arguments = "-d push \"" + folderPath + "\\" + "name.txt\"" + " /sdcard/" + txtFileName;
+        processfinal.StartInfo.Arguments = "push \"" + folderPath + "\\" + "name.txt\"" + " /sdcard/" + txtFileName;
         processfinal.Start();
         processfinal.WaitForExit();
     }
