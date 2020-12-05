@@ -22,6 +22,7 @@
 
   <ItemGroup>
     <Reference Include="Microsoft.VisualBasic" />
+    <Reference Include="System.Windows.Forms" />
   </ItemGroup>
 
 </Project>

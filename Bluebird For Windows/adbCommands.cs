@@ -8,6 +8,7 @@ public class adbCommands
 
     public void uninstall(string gameID)
     {
+        startADB();
         Process processayo = new Process();
         processayo.StartInfo.WindowStyle = ProcessWindowStyle.Hidden;
         processayo.StartInfo.CreateNoWindow = true;
@@ -19,6 +20,7 @@ public class adbCommands
 
     public void installAPK(string folderPath, string gameName, string apkName)
     {
+        startADB();
         Process processda = new Process();
         processda.StartInfo.WindowStyle = ProcessWindowStyle.Hidden;
         processda.StartInfo.CreateNoWindow = true;
@@ -30,6 +32,7 @@ public class adbCommands
 
     public void grantPermissions(string gameID)
     {
+        startADB();
         Process processpizza = new Process();
         processpizza.StartInfo.WindowStyle = ProcessWindowStyle.Hidden;
         processpizza.StartInfo.CreateNoWindow = true;
@@ -57,6 +60,7 @@ public class adbCommands
 
     public void pushOBB(string folderPath, string gameName, string obbName, string gameID)
     {
+        startADB();
         Process processmonkaS = new Process();
         processmonkaS.StartInfo.WindowStyle = ProcessWindowStyle.Hidden;
         processmonkaS.StartInfo.CreateNoWindow = true;
@@ -68,6 +72,7 @@ public class adbCommands
 
     public void pushName(string folderPath, string txtFileName)
     {
+        startADB();
         Process processfinal = new Process();
         processfinal.StartInfo.WindowStyle = ProcessWindowStyle.Hidden;
         processfinal.StartInfo.CreateNoWindow = true;
@@ -83,5 +88,28 @@ public class adbCommands
         {
             process.Kill();
         }
+    }
+
+    public void startADB()
+    {
+        Process process = new Process();
+        process.StartInfo.WindowStyle = ProcessWindowStyle.Hidden;
+        process.StartInfo.CreateNoWindow = true;
+        process.StartInfo.FileName = adbLocation;
+        process.StartInfo.Arguments = "devices";
+        process.Start();
+        process.WaitForExit();
+    }
+
+    public void pushMap(string mapName, string mapDir)
+    {
+        startADB();
+        Process process = new Process();
+        process.StartInfo.WindowStyle = ProcessWindowStyle.Hidden;
+        process.StartInfo.CreateNoWindow = true;
+        process.StartInfo.FileName = adbLocation;
+        process.StartInfo.Arguments = "push " + mapDir + " /sdcard/pavlov/maps/";
+        process.Start();
+        process.WaitForExit();
     }
 }

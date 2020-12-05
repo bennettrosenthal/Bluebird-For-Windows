@@ -196,16 +196,16 @@ namespace Bluebird_For_Windows
                     }
                     
                     adbCommands pog = new adbCommands();
-                    pog.uninstall(gameID);
-                    pogbox.Text = gameName + "uninstalled if present! Installing APK...";
-                    pog.installAPK(folderPath, gameName, apkName);
+                    await Task.Run(() => pog.uninstall(gameID));
+                    pogbox.Text = gameName + " uninstalled if present! Installing APK...";
+                    await Task.Run(() => pog.installAPK(folderPath, gameName, apkName));
                     pogbox.Text = "APK installed! Setting permissions...";
-                    pog.grantPermissions(gameID);
+                    await Task.Run(() => pog.grantPermissions(gameID));
                     pogbox.Text = "Permissions set! Pushing OBB...";
-                    pog.pushOBB(folderPath, gameName, obbName, gameID);
+                    await Task.Run(() => pog.pushOBB(folderPath, gameName, obbName, gameID));
                     pogbox.Text = "OBB pushed! Setting name...";
-                    pog.pushName(folderPath, txtFileName);
-                    pogbox.Text = gameName + "installed!";
+                    await Task.Run(() => pog.pushName(folderPath, txtFileName));
+                    pogbox.Text = gameName + " installed!";
             }
         }
 
@@ -326,8 +326,27 @@ namespace Bluebird_For_Windows
                 file.WriteLine(name);
             }
             adbCommands nam = new adbCommands();
-            nam.pushName(folderPath, txtFileName);
+            await Task.Run(() => nam.pushName(folderPath, txtFileName));
             pogbox.Text = "Name set for " + gameName + "!"; 
+        }
+
+        async void mapButton_Click(object sender, RoutedEventArgs e)
+        {
+            System.Windows.Forms.FolderBrowserDialog fileDialog = new System.Windows.Forms.FolderBrowserDialog();
+            System.Windows.Forms.DialogResult result = fileDialog.ShowDialog();
+
+            if (result == System.Windows.Forms.DialogResult.OK)
+            {
+                string mapDir = fileDialog.SelectedPath;
+                string mapName = System.IO.Path.GetDirectoryName(mapDir);
+                mapName = mapDir.Replace(mapName, "");
+                mapName = mapName.Replace("\\", "");
+                pogbox.Text = "Pushing " + mapName + "...";
+
+                adbCommands map = new adbCommands();
+                await Task.Run(() => map.pushMap(mapName, mapDir));
+                pogbox.Text = mapName + " pushed!";
+            }
         }
     }
     }
