@@ -1,7 +1,7 @@
 # Bluebird-For-Windows
 a Windows version of my GUI for sideloading Oculus Quest games
 
-![UI](https://i.imgur.com/s5xJvem.png)
+![UI](https://i.imgur.com/TEQNsQF.png)
 
 # What does it do?
 Bluebird for Windows can install Oculus Quest games, uninstall them, grant mic, read and write permissions for those games, change your name in those games, and push maps for Pavlov: Shack.
