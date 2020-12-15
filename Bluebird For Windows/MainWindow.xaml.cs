@@ -61,6 +61,9 @@ namespace Bluebird_For_Windows
 
             // hide progress bar
             pogbar.Visibility = Visibility.Hidden;
+
+            // hide status rectangle
+            statusRectangle.Visibility = Visibility.Hidden;
         }
 
         private void pogcheck_Loaded(object sender, RoutedEventArgs e)
@@ -71,6 +74,52 @@ namespace Bluebird_For_Windows
         private void pogcheck_SelectionChanged(object sender, SelectionChangedEventArgs e)
         {
             Object gameChosen = pogcheck.SelectedItem;
+            // gets path to data folder
+            String folderPath = Environment.GetFolderPath(Environment.SpecialFolder.ProgramFilesX86) + "\\ModernEra";
+            // reads into a string, then splits the string into an array, where each item is a portion of the txt, split by the word "END"
+            string txtLines = File.ReadAllText(folderPath + "\\upsiopts.txt");
+            string[] split = txtLines.Split(new string[] { "END" }, StringSplitOptions.None);
+            // gets the selected item's index, and because the order of the names will be the same as the one in the txt, 
+            // uses it to select the game's array item
+            int index = pogcheck.SelectedIndex;
+            string[] gameArray = split[index].Split(new string[] { "\n" }, StringSplitOptions.None);
+
+            // getting the required details for download and install
+            string gameImage = "";
+            string gameName = "";
+
+            foreach (string line in gameArray)
+            {
+                if (line.StartsWith("PICTUREFROM="))
+                {
+                    string temp = line.Substring(line.IndexOf("PICTUREFROM=")).Replace("PICTUREFROM=", "");
+                    string temp2 = temp.Replace("\r", "");
+                    gameImage = temp2;
+                }
+
+                if (line.StartsWith("NAME="))
+                {
+                    string temp = line.Substring(line.IndexOf("NAME=")).Replace("NAME=", "");
+                    string temp2 = temp.Replace("\r", "");
+                    gameName = temp2;
+                }
+            }
+            
+            if (!File.Exists(folderPath + "\\" + gameName + ".png"))
+            {
+                Uri imageURL = new Uri(gameImage);
+                WebClient imageClient = new WebClient();
+                imageClient.DownloadFileCompleted += new AsyncCompletedEventHandler(done);
+                imageClient.DownloadFileAsync(imageURL, folderPath + "\\" + gameName + ".png");
+
+                void done(object ender, AsyncCompletedEventArgs a)
+                {
+                    this.Background = new ImageBrush(new BitmapImage(new Uri(folderPath + "\\" + gameName + ".png")));
+                }
+            } else
+            {
+                this.Background = new ImageBrush(new BitmapImage(new Uri(folderPath + "\\" + gameName + ".png")));
+            }
         }
 
         private void pogcheck_Click(object sender, MouseEventArgs e)
@@ -89,6 +138,7 @@ namespace Bluebird_For_Windows
             // uses it to select the game's array item
             int index = pogcheck.SelectedIndex;
             string[] gameArray = split[index].Split(new string[] { "\n" }, StringSplitOptions.None);
+            statusRectangle.Visibility = Visibility.Visible;
             
             // getting the required details for download and install
             string gameURL = "";
@@ -153,10 +203,6 @@ namespace Bluebird_For_Windows
             // set up download environment
 
             Uri gameDL = new Uri(gameURL);
-            if (Directory.Exists(folderPath + "\\" + gameName))
-            {
-                Directory.Delete(folderPath + "\\" + gameName, true);
-            }
             if (Directory.Exists(folderPath + "\\" + "adb"))
             {
                 Directory.Delete(folderPath + "\\" + "adb", true);
