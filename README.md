@@ -1,4 +1,4 @@
-# Bluebird-for-Windows
+# Bluebird for Windows
 a Windows version of my GUI for sideloading Oculus Quest games
 
 ![UI](https://i.imgur.com/TEQNsQF.png)
