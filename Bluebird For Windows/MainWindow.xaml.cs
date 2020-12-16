@@ -74,6 +74,7 @@ namespace Bluebird_For_Windows
         private void pogcheck_SelectionChanged(object sender, SelectionChangedEventArgs e)
         {
             Object gameChosen = pogcheck.SelectedItem;
+            pogcheck.IsEnabled = false;
             // gets path to data folder
             String folderPath = Environment.GetFolderPath(Environment.SpecialFolder.ProgramFilesX86) + "\\ModernEra";
             // reads into a string, then splits the string into an array, where each item is a portion of the txt, split by the word "END"
@@ -115,10 +116,12 @@ namespace Bluebird_For_Windows
                 void done(object ender, AsyncCompletedEventArgs a)
                 {
                     this.Background = new ImageBrush(new BitmapImage(new Uri(folderPath + "\\" + gameName + ".png")));
+                    pogcheck.IsEnabled = true;
                 }
             } else
             {
                 this.Background = new ImageBrush(new BitmapImage(new Uri(folderPath + "\\" + gameName + ".png")));
+                pogcheck.IsEnabled = true;
             }
         }
 
