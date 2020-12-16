@@ -272,6 +272,7 @@ namespace Bluebird_For_Windows
             // uses it to select the game's array item
             int index = pogcheck.SelectedIndex;
             string[] gameArray = split[index].Split(new string[] { "\n" }, StringSplitOptions.None);
+            statusRectangle.Visibility = Visibility.Visible;
 
             string gameID = "";
             string gameName = "";
@@ -310,6 +311,7 @@ namespace Bluebird_For_Windows
             // uses it to select the game's array item
             int index = pogcheck.SelectedIndex;
             string[] gameArray = split[index].Split(new string[] { "\n" }, StringSplitOptions.None);
+            statusRectangle.Visibility = Visibility.Visible;
 
             string gameID = "";
             string gameName = "";
@@ -349,6 +351,7 @@ namespace Bluebird_For_Windows
             // uses it to select the game's array item
             int index = pogcheck.SelectedIndex;
             string[] gameArray = split[index].Split(new string[] { "\n" }, StringSplitOptions.None);
+            statusRectangle.Visibility = Visibility.Visible;
 
             string txtFileName = "";
             string gameName = "";
@@ -389,6 +392,7 @@ namespace Bluebird_For_Windows
         {
             System.Windows.Forms.FolderBrowserDialog fileDialog = new System.Windows.Forms.FolderBrowserDialog();
             System.Windows.Forms.DialogResult result = fileDialog.ShowDialog();
+            statusRectangle.Visibility = Visibility.Visible;
 
             if (result == System.Windows.Forms.DialogResult.OK)
             {
@@ -402,6 +406,28 @@ namespace Bluebird_For_Windows
                 await Task.Run(() => map.pushMap(mapName, mapDir));
                 map.killADB();
                 pogbox.Text = mapName + " pushed!";
+            }
+        }
+
+        async void apkButton_Click(object sender, RoutedEventArgs e)
+        {
+            System.Windows.Forms.OpenFileDialog fileDialog = new System.Windows.Forms.OpenFileDialog();
+            fileDialog.Filter = "APK files (*.apk)|*.apk";
+            System.Windows.Forms.DialogResult result = fileDialog.ShowDialog();
+            statusRectangle.Visibility = Visibility.Visible;
+
+            if (result == System.Windows.Forms.DialogResult.OK)
+            {
+                string apkDir = fileDialog.FileName;
+                string apkName = System.IO.Path.GetDirectoryName(apkDir);
+                apkName = apkDir.Replace(apkName, "");
+                apkName = apkName.Replace("\\", "");
+                pogbox.Text = "Installing " + apkName + "...";
+
+                adbCommands apk = new adbCommands();
+                await Task.Run(() => apk.installLoneAPK(apkDir));
+                apk.killADB();
+                pogbox.Text = apkName + " installed!";
             }
         }
     }

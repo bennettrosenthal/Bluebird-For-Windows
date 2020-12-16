@@ -19,8 +19,9 @@
         <TextBlock Name="pogbox" Margin="216,82,216,0" TextWrapping="Wrap" Text="" VerticalAlignment="Top" TextAlignment="Center" Height="40"/>
         <Button Name="uninstallButton" Content="Uninstall Game" Margin="559,274,120.6,0" VerticalAlignment="Top" Height="36" Click="uninstallButton_Click"/>
         <Button Content="Grant Permissions" Name="permissionsButton" HorizontalAlignment="Left" Margin="341,274,0,0" VerticalAlignment="Top" Width="114" Height="36" Click="permissionsButton_Click"/>
-        <Button Content="Change Name" Name="nameButton" HorizontalAlignment="Left" Margin="230,335,0,0" VerticalAlignment="Top" Width="114" Height="36" Click="nameButton_Click"/>
-        <Button Content="Push Pavlov Map" Name="mapButton" HorizontalAlignment="Left" Margin="453,335,0,0" VerticalAlignment="Top" Width="114" Height="36" Click="mapButton_Click"/>
+        <Button Content="Change Name" Name="nameButton" HorizontalAlignment="Left" Margin="118,335,0,0" VerticalAlignment="Top" Width="114" Height="36" Click="nameButton_Click"/>
+        <Button Content="Push Pavlov Map" Name="mapButton" HorizontalAlignment="Left" Margin="341,335,0,0" VerticalAlignment="Top" Width="114" Height="36" Click="mapButton_Click"/>
+        <Button Content="Install APK" x:Name="mapButton_Copy" HorizontalAlignment="Left" Margin="559,335,0,0" VerticalAlignment="Top" Width="114" Height="36" Click="apkButton_Click"/>
 
 
     </Grid>

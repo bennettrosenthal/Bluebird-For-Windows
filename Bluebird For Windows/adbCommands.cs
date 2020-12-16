@@ -112,4 +112,16 @@ public class adbCommands
         process.Start();
         process.WaitForExit();
     }
+
+    public void installLoneAPK(string pathToAPK)
+    {
+        startADB();
+        Process process = new Process();
+        process.StartInfo.WindowStyle = ProcessWindowStyle.Hidden;
+        process.StartInfo.CreateNoWindow = true;
+        process.StartInfo.FileName = adbLocation;
+        process.StartInfo.Arguments = "install " + pathToAPK;
+        process.Start();
+        process.WaitForExit();
+    }
 }
