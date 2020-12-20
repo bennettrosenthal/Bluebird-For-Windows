@@ -22,6 +22,7 @@ using System.Net.Mime;
 using System.Security.Cryptography.X509Certificates;
 using Microsoft.VisualBasic;
 using System.Windows.Automation;
+using System.Windows.Forms;
 
 namespace Bluebird_For_Windows
 {
@@ -50,12 +51,15 @@ namespace Bluebird_For_Windows
             string temp;
 
             // loops through array, looking for the names of the games then drops them into the dropdown
+            int counter = 0;
+            pogcheck.SelectedIndex = 2;
             foreach (string line in txtLines)
             {
                 if (line.StartsWith("NAME="))
                 {
                     temp = line.Substring(line.IndexOf("NAME=")).Replace("NAME=", "");
-                    pogcheck.Items.Add(temp);
+                    pogcheck.Items.Insert(counter, temp);
+                    counter += 1;
                 }
             }
 
@@ -64,6 +68,9 @@ namespace Bluebird_For_Windows
 
             // hide status rectangle
             statusRectangle.Visibility = Visibility.Hidden;
+
+            // hide package list
+            pkgList.Visibility = Visibility.Hidden;
         }
 
         private void pogcheck_Loaded(object sender, RoutedEventArgs e)
@@ -123,11 +130,6 @@ namespace Bluebird_For_Windows
                 this.Background = new ImageBrush(new BitmapImage(new Uri(folderPath + "\\" + gameName + ".png")));
                 pogcheck.IsEnabled = true;
             }
-        }
-
-        private void pogcheck_Click(object sender, MouseEventArgs e)
-        {
-            
         }
 
         private void Button_Click(object sender, RoutedEventArgs e)
@@ -425,6 +427,7 @@ namespace Bluebird_For_Windows
                 string apkName = System.IO.Path.GetDirectoryName(apkDir);
                 apkName = apkDir.Replace(apkName, "");
                 apkName = apkName.Replace("\\", "");
+                apkDir = "\"" + apkDir + "\"";
                 pogbox.Text = "Installing " + apkName + "...";
 
                 adbCommands apk = new adbCommands();
@@ -432,6 +435,29 @@ namespace Bluebird_For_Windows
                 apk.killADB();
                 pogbox.Text = apkName + " installed!";
             }
+        }
+
+        async void pkgButton_Click(object sender, RoutedEventArgs e)
+        {
+            adbCommands pkgs = new adbCommands();
+            await Task.Run(() => pkgs.getPackages());
+            pkgs.killADB();
+            string packages = pkgs.getPackageString();
+            packages.Replace("\n", "");
+            string[] packageArray = packages.Split(new string[] { "\r" }, StringSplitOptions.None);
+            string newPkgString = "";
+            foreach (var item in packageArray)
+            {
+                newPkgString += item;
+            }
+            string[] newPkgArray = newPkgString.Split(new string[] { "\n" }, StringSplitOptions.None);
+            foreach (var pkg in newPkgArray)
+            {
+                pkgList.Items.Add(pkg);
+            }
+            pkgList.Items.RemoveAt(pkgList.Items.Count - 1);
+            pkgList.SelectedIndex = 0;
+            pkgList.Visibility = Visibility.Visible;
         }
     }
     }

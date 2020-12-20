@@ -5,15 +5,15 @@
         xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
         xmlns:local="clr-namespace:Bluebird_For_Windows"
         mc:Ignorable="d"
-        Title="Bluebird For Windows" Height="450" Width="800">
-    <Grid>
+        Title="Bluebird For Windows" Height="550" Width="800">
+    <Grid Margin="0,0,-0.4,-9">
         <Rectangle Fill="#FFF4F4F5" HorizontalAlignment="Left" Height="50" Margin="273,12,0,0" Stroke="Black" VerticalAlignment="Top" Width="252"/>
         <Rectangle Fill="#FFF4F4F5" HorizontalAlignment="Left" Height="20" Margin="335,150,0,0" Stroke="Black" VerticalAlignment="Top" Width="122"/>
         <Rectangle Name="statusRectangle" Fill="#FFF4F4F5" HorizontalAlignment="Left" Height="40" Margin="216,82,0,0" Stroke="Black" VerticalAlignment="Top" Width="362"/>
-        <ComboBox Name="pogcheck" Margin="255,175,254,0" VerticalAlignment="Top" Loaded="pogcheck_Loaded" PreviewMouseDown="pogcheck_Click" SelectionChanged="pogcheck_SelectionChanged" Height="22"/>
+        <ComboBox Name="pogcheck" Margin="255,175,254,0" VerticalAlignment="Top" Loaded="pogcheck_Loaded" SelectionChanged="pogcheck_SelectionChanged" Height="22"/>
         <Button Content="Install Game" Margin="118,274,561.6,0" VerticalAlignment="Top" Height="36" Click="Button_Click"/>
         <TextBlock HorizontalAlignment="Center" Text="Please select a game." TextWrapping="Wrap" VerticalAlignment="Top" Margin="335,151,334.6,0"/>
-        <ProgressBar Name="pogbar" HorizontalAlignment="Stretch" Margin="255,203,254.6,201" Width="Auto"/>
+        <ProgressBar Name="pogbar" HorizontalAlignment="Stretch" Margin="255,203,255,305.8" Width="Auto"/>
         <TextBlock HorizontalAlignment="Left" Margin="285,12,0,0" TextWrapping="Wrap" Text="Bluebird for Windows" VerticalAlignment="Top" FontSize="24"/>
         <TextBlock HorizontalAlignment="Left" Margin="335,38,0,0" TextWrapping="Wrap" Text="by Modern Era" VerticalAlignment="Top" FontSize="18" FontStyle="Italic"/>
         <TextBlock Name="pogbox" Margin="216,82,216,0" TextWrapping="Wrap" Text="" VerticalAlignment="Top" TextAlignment="Center" Height="40"/>
@@ -22,6 +22,8 @@
         <Button Content="Change Name" Name="nameButton" HorizontalAlignment="Left" Margin="118,335,0,0" VerticalAlignment="Top" Width="114" Height="36" Click="nameButton_Click"/>
         <Button Content="Push Pavlov Map" Name="mapButton" HorizontalAlignment="Left" Margin="341,335,0,0" VerticalAlignment="Top" Width="114" Height="36" Click="mapButton_Click"/>
         <Button Content="Install APK" x:Name="mapButton_Copy" HorizontalAlignment="Left" Margin="559,335,0,0" VerticalAlignment="Top" Width="114" Height="36" Click="apkButton_Click"/>
+        <Button Name="pkgButton" Content="Get Installed Apps" HorizontalAlignment="Left" Margin="341,423,0,0" VerticalAlignment="Top" Width="112" Click="pkgButton_Click" Height="36"/>
+        <ComboBox Name="pkgList" HorizontalAlignment="Left" Margin="255,464,0,0" VerticalAlignment="Top" Width="285"/>
 
 
     </Grid>

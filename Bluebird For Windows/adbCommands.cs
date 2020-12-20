@@ -5,7 +5,7 @@ using System.Windows.Controls;
 public class adbCommands
 {   
     public string adbLocation = AppDomain.CurrentDomain.BaseDirectory + "\\adb.exe";
-
+    private string packageString = "";
     public void uninstall(string gameID)
     {
         startADB();
@@ -123,5 +123,26 @@ public class adbCommands
         process.StartInfo.Arguments = "install " + pathToAPK;
         process.Start();
         process.WaitForExit();
+    }
+
+    public void getPackages()
+    {
+        startADB();
+        Process process = new Process();
+        process.StartInfo.WindowStyle = ProcessWindowStyle.Hidden;
+        process.StartInfo.CreateNoWindow = true;
+        process.StartInfo.FileName = adbLocation;
+        process.StartInfo.RedirectStandardError = true;
+        process.StartInfo.RedirectStandardOutput = true;
+        process.StartInfo.UseShellExecute = false;
+        process.StartInfo.Arguments = "shell pm list packages -3\"|cut -f 2 -d \":";
+        process.Start();
+        packageString = process.StandardOutput.ReadToEnd();
+        process.WaitForExit();
+    }
+
+    public string getPackageString()
+    {
+        return packageString;
     }
 }
