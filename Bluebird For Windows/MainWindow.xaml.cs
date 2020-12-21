@@ -71,6 +71,9 @@ namespace Bluebird_For_Windows
 
             // hide package list
             pkgList.Visibility = Visibility.Hidden;
+
+            // disable uninstall apk button
+            uninstallPkgButton.IsEnabled = false;
         }
 
         private void pogcheck_Loaded(object sender, RoutedEventArgs e)
@@ -434,12 +437,31 @@ namespace Bluebird_For_Windows
                 await Task.Run(() => apk.installLoneAPK(apkDir));
                 apk.killADB();
                 pogbox.Text = apkName + " installed!";
+                refreshPackageList();
             }
         }
 
         async void pkgButton_Click(object sender, RoutedEventArgs e)
         {
+            refreshPackageList();
+            uninstallPkgButton.IsEnabled = true;
+        }
+
+        async void uninstallPkgButton_Click(object sender, RoutedEventArgs e)
+        {
+            statusRectangle.Visibility = Visibility.Visible;
             adbCommands pkgs = new adbCommands();
+            string selectedPkg = pkgList.SelectedItem.ToString();
+            pogbox.Text = "Uninstalling " + selectedPkg + "...";
+            await Task.Run(() => pkgs.uninstallPackage(selectedPkg));
+            pogbox.Text = selectedPkg + " uninstalled!";
+            refreshPackageList();
+        }
+
+        async void refreshPackageList()
+        {
+            adbCommands pkgs = new adbCommands();
+            pkgList.Items.Clear();
             await Task.Run(() => pkgs.getPackages());
             pkgs.killADB();
             string packages = pkgs.getPackageString();

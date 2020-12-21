@@ -145,4 +145,16 @@ public class adbCommands
     {
         return packageString;
     }
+
+    public void uninstallPackage(string package)
+    {
+        startADB();
+        Process process = new Process();
+        process.StartInfo.WindowStyle = ProcessWindowStyle.Hidden;
+        process.StartInfo.CreateNoWindow = true;
+        process.StartInfo.FileName = adbLocation;
+        process.StartInfo.Arguments = "uninstall " + package;
+        process.Start();
+        process.WaitForExit();
+    }
 }
