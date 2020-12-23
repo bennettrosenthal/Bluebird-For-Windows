@@ -4,6 +4,11 @@ using System.Windows.Controls;
 
 public class adbCommands
 {   
+    /*
+    This class hosts all of the adb related things in this app. Made the mistake of not making any functions in the macOS
+    version of Bluebird, and I've learned why this is a requirement for workplace coding. Way way cleaner. :)
+    */
+    
     public string adbLocation = AppDomain.CurrentDomain.BaseDirectory + "\\adb.exe";
     private string packageString = "";
     public void uninstall(string gameID)
