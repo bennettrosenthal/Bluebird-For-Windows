@@ -53,9 +53,6 @@ namespace Bluebird_For_Windows
             // hide progress bar
             pogbar.Visibility = Visibility.Hidden;
 
-            // hide status rectangle
-            statusRectangle.Visibility = Visibility.Hidden;
-
             // hide package list
             pkgList.Visibility = Visibility.Hidden;
 
@@ -71,7 +68,6 @@ namespace Bluebird_For_Windows
         private void pogcheck_SelectionChanged(object sender, SelectionChangedEventArgs e)
         {
             Object gameChosen = pogcheck.SelectedItem;
-            pogcheck.IsEnabled = false;
             // gets path to data folder
             String folderPath = Environment.GetFolderPath(Environment.SpecialFolder.ProgramFilesX86) + "\\ModernEra";
             // reads into a string, then splits the string into an array, where each item is a portion of the txt, split by the word "END"
@@ -102,24 +98,7 @@ namespace Bluebird_For_Windows
                     gameName = temp2;
                 }
             }
-            
-            if (!File.Exists(folderPath + "\\" + gameName + ".png"))
-            {
-                Uri imageURL = new Uri(gameImage);
-                WebClient imageClient = new WebClient();
-                imageClient.DownloadFileCompleted += new AsyncCompletedEventHandler(done);
-                imageClient.DownloadFileAsync(imageURL, folderPath + "\\" + gameName + ".png");
-
-                void done(object ender, AsyncCompletedEventArgs a)
-                {
-                    this.Background = new ImageBrush(new BitmapImage(new Uri(folderPath + "\\" + gameName + ".png")));
-                    pogcheck.IsEnabled = true;
-                }
-            } else
-            {
-                this.Background = new ImageBrush(new BitmapImage(new Uri(folderPath + "\\" + gameName + ".png")));
-                pogcheck.IsEnabled = true;
-            }
+            gameOptionText.Text = "What do you want to do with " + gameName + "?";
         }
 
         private void Button_Click(object sender, RoutedEventArgs e)
@@ -133,7 +112,6 @@ namespace Bluebird_For_Windows
             // uses it to select the game's array item
             int index = pogcheck.SelectedIndex;
             string[] gameArray = split[index].Split(new string[] { "\n" }, StringSplitOptions.None);
-            statusRectangle.Visibility = Visibility.Visible;
             
             // getting the required details for download and install
             string gameURL = "";
@@ -267,7 +245,6 @@ namespace Bluebird_For_Windows
             // uses it to select the game's array item
             int index = pogcheck.SelectedIndex;
             string[] gameArray = split[index].Split(new string[] { "\n" }, StringSplitOptions.None);
-            statusRectangle.Visibility = Visibility.Visible;
 
             string gameID = "";
             string gameName = "";
@@ -306,7 +283,6 @@ namespace Bluebird_For_Windows
             // uses it to select the game's array item
             int index = pogcheck.SelectedIndex;
             string[] gameArray = split[index].Split(new string[] { "\n" }, StringSplitOptions.None);
-            statusRectangle.Visibility = Visibility.Visible;
 
             string gameID = "";
             string gameName = "";
@@ -346,7 +322,6 @@ namespace Bluebird_For_Windows
             // uses it to select the game's array item
             int index = pogcheck.SelectedIndex;
             string[] gameArray = split[index].Split(new string[] { "\n" }, StringSplitOptions.None);
-            statusRectangle.Visibility = Visibility.Visible;
 
             string txtFileName = "";
             string gameName = "";
@@ -387,7 +362,6 @@ namespace Bluebird_For_Windows
         {
             System.Windows.Forms.FolderBrowserDialog fileDialog = new System.Windows.Forms.FolderBrowserDialog();
             System.Windows.Forms.DialogResult result = fileDialog.ShowDialog();
-            statusRectangle.Visibility = Visibility.Visible;
 
             if (result == System.Windows.Forms.DialogResult.OK)
             {
@@ -409,7 +383,6 @@ namespace Bluebird_For_Windows
             System.Windows.Forms.OpenFileDialog fileDialog = new System.Windows.Forms.OpenFileDialog();
             fileDialog.Filter = "APK files (*.apk)|*.apk";
             System.Windows.Forms.DialogResult result = fileDialog.ShowDialog();
-            statusRectangle.Visibility = Visibility.Visible;
 
             if (result == System.Windows.Forms.DialogResult.OK)
             {
@@ -436,7 +409,6 @@ namespace Bluebird_For_Windows
 
         async void uninstallPkgButton_Click(object sender, RoutedEventArgs e)
         {
-            statusRectangle.Visibility = Visibility.Visible;
             adbCommands pkgs = new adbCommands();
             string selectedPkg = pkgList.SelectedItem.ToString();
             pogbox.Text = "Uninstalling " + selectedPkg + "...";

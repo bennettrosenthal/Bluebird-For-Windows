@@ -5,26 +5,79 @@
         xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
         xmlns:local="clr-namespace:Bluebird_For_Windows"
         mc:Ignorable="d"
-        Title="Bluebird For Windows" Height="600" Width="800">
+        Title="Bluebird" Height="450" Width="800">
     <Grid Margin="0,0,-0.4,-9">
-        <Rectangle Fill="#FFF4F4F5" HorizontalAlignment="Left" Height="50" Margin="273,12,0,0" Stroke="Black" VerticalAlignment="Top" Width="252"/>
-        <Rectangle Fill="#FFF4F4F5" HorizontalAlignment="Left" Height="20" Margin="335,150,0,0" Stroke="Black" VerticalAlignment="Top" Width="122"/>
-        <Rectangle Name="statusRectangle" Fill="#FFF4F4F5" HorizontalAlignment="Left" Height="40" Margin="216,82,0,0" Stroke="Black" VerticalAlignment="Top" Width="362"/>
-        <ComboBox Name="pogcheck" Margin="255,175,254,0" VerticalAlignment="Top" Loaded="pogcheck_Loaded" SelectionChanged="pogcheck_SelectionChanged" Height="22"/>
-        <Button Content="Install Game" Margin="118,274,561.6,0" VerticalAlignment="Top" Height="36" Click="Button_Click"/>
-        <TextBlock HorizontalAlignment="Center" Text="Please select a game." TextWrapping="Wrap" VerticalAlignment="Top" Margin="335,151,334.6,0"/>
-        <ProgressBar Name="pogbar" HorizontalAlignment="Stretch" Margin="255,203,255,354.4" Width="Auto"/>
-        <TextBlock HorizontalAlignment="Left" Margin="285,12,0,0" TextWrapping="Wrap" Text="Bluebird for Windows" VerticalAlignment="Top" FontSize="24"/>
-        <TextBlock HorizontalAlignment="Left" Margin="335,38,0,0" TextWrapping="Wrap" Text="by Modern Era" VerticalAlignment="Top" FontSize="18" FontStyle="Italic"/>
-        <TextBlock Name="pogbox" Margin="216,82,216,0" TextWrapping="Wrap" Text="" VerticalAlignment="Top" TextAlignment="Center" Height="40"/>
-        <Button Name="uninstallButton" Content="Uninstall Game" Margin="559,274,120.6,0" VerticalAlignment="Top" Height="36" Click="uninstallButton_Click"/>
-        <Button Content="Grant Permissions" Name="permissionsButton" HorizontalAlignment="Left" Margin="341,274,0,0" VerticalAlignment="Top" Width="114" Height="36" Click="permissionsButton_Click"/>
-        <Button Content="Change Name" Name="nameButton" HorizontalAlignment="Left" Margin="231,335,0,0" VerticalAlignment="Top" Width="114" Height="36" Click="nameButton_Click"/>
-        <Button Content="Push Pavlov Map" Name="mapButton" HorizontalAlignment="Left" Margin="452,335,0,0" VerticalAlignment="Top" Width="114" Height="36" Click="mapButton_Click"/>
-        <Button Content="Install APK" x:Name="mapButton_Copy" HorizontalAlignment="Left" Margin="118,506,0,0" VerticalAlignment="Top" Width="114" Height="36" Click="apkButton_Click"/>
-        <Button Name="pkgButton" Content="Get Installed Apps" HorizontalAlignment="Left" Margin="341,423,0,0" VerticalAlignment="Top" Width="112" Click="pkgButton_Click" Height="36"/>
-        <ComboBox Name="pkgList" HorizontalAlignment="Left" Margin="255,464,0,0" VerticalAlignment="Top" Width="285"/>
-        <Button Content="Uninstall Chosen Game" Name="uninstallPkgButton" HorizontalAlignment="Left" Margin="541,506,0,0" VerticalAlignment="Top" Width="132" Height="36" Click="uninstallPkgButton_Click"/>
+        <TextBlock HorizontalAlignment="Center" Text="Please select a game from the dropdown box." TextWrapping="Wrap" VerticalAlignment="Top" Margin="272,65,264,0" FontFamily="Helvetica" Width="Auto"/>
+        <ComboBox Name="pogcheck" Margin="255,84,254,0" VerticalAlignment="Top" Loaded="pogcheck_Loaded" SelectionChanged="pogcheck_SelectionChanged" Height="22"/>
+        <Button Content="Install Game" Margin="116,224,564,0" VerticalAlignment="Top" Height="20" Click="Button_Click" FontFamily="Helvetica">
+            <Button.Resources>
+                <Style TargetType="Border">
+                    <Setter Property="CornerRadius" Value="5"/>
+                </Style>
+            </Button.Resources>
+        </Button>
+        
+        <ProgressBar Name="pogbar" HorizontalAlignment="Stretch" Margin="255,111,254,305" Width="Auto"/>
+        <TextBlock HorizontalAlignment="Left" Margin="19,10,0,0" TextWrapping="Wrap" Text="Bluebird" VerticalAlignment="Top" FontSize="32" FontFamily="Helvetica"/>
+        <TextBlock HorizontalAlignment="Left" Margin="19,41,0,0" TextWrapping="Wrap" Text="Created by Modern Era" VerticalAlignment="Top" FontSize="18" FontFamily="Helvetica" Foreground="DimGray"/>
+        <TextBlock Name="pogbox" Margin="219,149,214,0" TextWrapping="Wrap" Text="" VerticalAlignment="Top" TextAlignment="Center" Height="40"/>
+        <Button Name="uninstallButton" Content="Uninstall Game" Margin="570,224,113,0" VerticalAlignment="Top" Height="20" Click="uninstallButton_Click" FontFamily="Helvetica">
+            <Button.Resources>
+                <Style TargetType="Border">
+                    <Setter Property="CornerRadius" Value="5"/>
+                </Style>
+            </Button.Resources>
+        </Button>
+
+        <Button Name="permissionsButton" HorizontalAlignment="Left" Margin="343,224,0,0" VerticalAlignment="Top" Width="114" Height="20" Click="permissionsButton_Click" FontFamily="Helvetica">
+            <Button.Resources>
+                <Style TargetType="Border">
+                    <Setter Property="CornerRadius" Value="5"/>
+                </Style>
+            </Button.Resources>
+            Grant Permissions
+        </Button>
+
+        <Button Content="Change Name" Name="nameButton" HorizontalAlignment="Left" Margin="227,249,0,0" VerticalAlignment="Top" Width="114" Height="20" Click="nameButton_Click" FontFamily="Helvetica">
+            <Button.Resources>
+                <Style TargetType="Border">
+                    <Setter Property="CornerRadius" Value="5"/>
+                </Style>
+            </Button.Resources>
+        </Button>
+
+        <Button Content="Push Pavlov Map" Name="mapButton" HorizontalAlignment="Left" Margin="457,249,0,0" VerticalAlignment="Top" Width="114" Height="20" Click="mapButton_Click" FontFamily="Helvetica">
+            <Button.Resources>
+                <Style TargetType="Border">
+                    <Setter Property="CornerRadius" Value="5"/>
+                </Style>
+            </Button.Resources>
+        </Button>
+
+        <Button Content="Install APK" x:Name="mapButton_Copy" HorizontalAlignment="Left" Margin="255,374,0,0" VerticalAlignment="Top" Width="114" Height="20" Click="apkButton_Click">
+            <Button.Resources>
+                <Style TargetType="Border">
+                    <Setter Property="CornerRadius" Value="5"/>
+                </Style>
+            </Button.Resources>
+        </Button>
+
+        <Button Name="pkgButton" Content="Get Installed Apps" HorizontalAlignment="Left" Margin="343,322,0,0" VerticalAlignment="Top" Width="112" Click="pkgButton_Click" Height="20" FontFamily="Helvetica">
+            <Button.Resources>
+                <Style TargetType="Border">
+                    <Setter Property="CornerRadius" Value="5"/>
+                </Style>
+            </Button.Resources>
+        </Button>
+        <ComboBox Name="pkgList" HorizontalAlignment="Left" Margin="255,347,0,0" VerticalAlignment="Top" Width="285"/>
+        <Button Content="Uninstall Chosen Game" Name="uninstallPkgButton" HorizontalAlignment="Left" Margin="408,374,0,0" VerticalAlignment="Top" Width="132" Height="20" Click="uninstallPkgButton_Click">
+            <Button.Resources>
+                <Style TargetType="Border">
+                    <Setter Property="CornerRadius" Value="5"/>
+                </Style>
+            </Button.Resources>
+        </Button>
+        <TextBlock Name="gameOptionText" HorizontalAlignment="Left" Margin="255,203,0,0" TextWrapping="Wrap" Text="" VerticalAlignment="Top" Width="285" TextAlignment="Center" FontFamily="Helvetica"/>
 
 
     </Grid>
