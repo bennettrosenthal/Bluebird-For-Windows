@@ -7,9 +7,9 @@
         mc:Ignorable="d"
         Title="Bluebird" Height="450" Width="800">
     <Grid Margin="0,0,-0.4,-9">
-        <TextBlock HorizontalAlignment="Center" Text="Please select a game from the dropdown box." TextWrapping="Wrap" VerticalAlignment="Top" Margin="272,65,264,0" FontFamily="Helvetica" Width="Auto"/>
+        <TextBlock Name="infoText" HorizontalAlignment="Center" Text="Please select a game from the dropdown box." TextWrapping="Wrap" VerticalAlignment="Top" Margin="272,65,264,0" FontFamily="Helvetica" Width="Auto"/>
         <ComboBox Name="pogcheck" Margin="255,84,254,0" VerticalAlignment="Top" Loaded="pogcheck_Loaded" SelectionChanged="pogcheck_SelectionChanged" Height="22"/>
-        <Button Content="Install Game" Margin="116,224,564,0" VerticalAlignment="Top" Height="20" Click="Button_Click" FontFamily="Helvetica">
+        <Button Name="installButton"  Content="Install Game" Margin="116,224,564,0" VerticalAlignment="Top" Height="20" Click="Button_Click" FontFamily="Helvetica">
             <Button.Resources>
                 <Style TargetType="Border">
                     <Setter Property="CornerRadius" Value="5"/>

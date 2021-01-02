@@ -27,29 +27,45 @@ namespace Bluebird_For_Windows
             String folderPath = Environment.GetFolderPath(Environment.SpecialFolder.ProgramFilesX86) + "\\ModernEra";
             WebClient dl = new WebClient();
             Uri txtURL = new Uri("https://thesideloader.co.uk/upsiopts.txt");
-            if (File.Exists(folderPath + "\\upsiopts.txt"))
+            try
             {
-                File.Delete(folderPath + "\\upsiopts.txt");
-            }
-            dl.DownloadFile(txtURL, folderPath + "\\upsiopts.txt");
-            
-            // creates an array to read the txt into an array
-            string[] txtLines = File.ReadAllLines(folderPath + "\\upsiopts.txt");
-            string temp;
+                dl.DownloadFile(txtURL, folderPath + "\\upsiopts-new.txt");
+                File.Move(folderPath + "\\upsiopts-new.txt", folderPath + "\\upsiopts.txt");
 
-            // loops through array, looking for the names of the games then drops them into the dropdown
-            int counter = 0;
-            pogcheck.SelectedIndex = 2;
-            foreach (string line in txtLines)
+            } catch
             {
-                if (line.StartsWith("NAME="))
+                if (!File.Exists(folderPath + "\\upsiopts.txt"))
                 {
-                    temp = line.Substring(line.IndexOf("NAME=")).Replace("NAME=", "");
-                    pogcheck.Items.Insert(counter, temp);
-                    counter += 1;
+                    pogcheck.IsEnabled = false;
+                    installButton.IsEnabled = false;
+                    uninstallButton.IsEnabled = false;
+                    nameButton.IsEnabled = false;
+                    permissionsButton.IsEnabled = false;
+                    mapButton.IsEnabled = false;
+                    infoText.Visibility = Visibility.Hidden;
+                    pogbox.Text = "Server is down and backup data file could not be found! As such, only the local package options at the bottom are available.";
                 }
             }
 
+            if (File.Exists(folderPath + "\\upsiopts.txt"))
+            {
+                // creates an array to read the txt into an array
+                string[] txtLines = File.ReadAllLines(folderPath + "\\upsiopts.txt");
+                string temp;
+
+                // loops through array, looking for the names of the games then drops them into the dropdown
+                int counter = 0;
+                pogcheck.SelectedIndex = 2;
+                foreach (string line in txtLines)
+                {
+                    if (line.StartsWith("NAME="))
+                    {
+                        temp = line.Substring(line.IndexOf("NAME=")).Replace("NAME=", "");
+                        pogcheck.Items.Insert(counter, temp);
+                        counter += 1;
+                    }
+                }
+            }
             // hide progress bar
             pogbar.Visibility = Visibility.Hidden;
 
