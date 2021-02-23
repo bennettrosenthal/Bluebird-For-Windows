@@ -26,7 +26,7 @@ namespace Bluebird_For_Windows
             Directory.CreateDirectory(Environment.GetFolderPath(Environment.SpecialFolder.ProgramFilesX86) + "\\ModernEra");
             String folderPath = Environment.GetFolderPath(Environment.SpecialFolder.ProgramFilesX86) + "\\ModernEra";
             WebClient dl = new WebClient();
-            Uri txtURL = new Uri("https://thesideloader.co.uk/upsiopts.txt");
+            Uri txtURL = new Uri("https://pastebin.com/raw/Ar2cKLHE");
             try
             {
                 dl.DownloadFile(txtURL, folderPath + "\\upsiopts-new.txt");
